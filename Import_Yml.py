@@ -23,6 +23,31 @@ predefined_colors = {
     'darkGray': (0.25, 0.25, 0.25),
 }
 
+def insertMesh(directory, filename, document, document_name, group, attributes = None):
+    Mesh.insert(u'{}/{}'.format(directory, filename), document_name)
+    new_mesh = document.getObject(filename[:-4])
+    if attributes:
+        color = getColor(attributes)
+        if color:
+            new_mesh.ViewObject.ShapeColor = color
+        transparency = getTransparency(attributes)
+        if transparency:
+            new_mesh.ViewObject.Transparency = transparency
+    group.addObject(new_mesh)
+
+def getColor(json_data):
+    color_data = json_data.get('color', None)
+    if not color_data:
+        return None
+    if not isinstance(color_data, list):
+        if color_data not in predefined_colors:
+            raise Exception('Color data needs to be an array of RGB floats or one of predefined colors!!!')
+        return predefined_colors[color_data]
+    return (color_data[0], color_data[1], color_data[2])
+
+def getTransparency(json_data):
+    return json_data.get('transparency', None)
+
 def open(filename):
     base_directory = os.path.dirname(filename)
     sub_directory = None
@@ -47,39 +72,27 @@ def open(filename):
 
     yaml_data = yaml_data['import']
 
-    for document, document_data in yaml_data.iteritems():
-        doc = App.newDocument(document)
+    for document_name, document_data in yaml_data.iteritems():
+        document = App.newDocument(document_name)
 
-        for group, group_data in document_data.iteritems():
-            App.getDocument(document).addObject("App::DocumentObjectGroup", group)
+        for group_name, group_data in document_data.iteritems():
+            document_group = document.addObject("App::DocumentObjectGroup", group_name)
 
             if isinstance(group_data, basestring):
-                Mesh.insert(u'{}/{}'.format(base_directory, group_data), document)
+                insertMesh(base_directory, group_data, document, document_name, document_group)
                 continue
 
             if isinstance(group_data, list):
                 for file in group_data:
-                    Mesh.insert(u'{}/{}'.format(base_directory, file), document)
+                    insertMesh(base_directory, file, document, document_name, document_group)
                 continue
 
             for file, file_data in group_data.iteritems():
                 if file == 'files':
                     for f in file_data:
-                        Mesh.insert(u'{}/{}'.format(base_directory, f), document)
+                        insertMesh(base_directory, f, document, document_name, document_group)
                     continue
-                Mesh.insert(u'{}/{}'.format(base_directory, file), document)
-                if 'color' in file_data:
-                    color_data = file_data['color']
-                    shape_color = None
-                    if not isinstance(color_data, list):
-                        if color_data not in predefined_colors:
-                            raise Exception('Color data needs to be an array of RGB floats or one of predefined colors!!!')
-                        shape_color = predefined_colors[color_data]
-                    else:
-                        shape_color = (color_data[0], color_data[1], color_data[2])
-                    Gui.getDocument(document).getObject(file[:-4]).ShapeColor = shape_color
-
-        doc.recompute()
-
+                insertMesh(base_directory, file, document, document_name, document_group, file_data)
+        document.recompute()
     Gui.activeDocument().activeView().viewAxonometric()
     Gui.SendMsgToActiveView("ViewFit")
