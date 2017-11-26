@@ -23,7 +23,7 @@ As simple as opening new file (Ctrl+O on Windows) in FreeCAD and selecting your 
 
 # YAML Structure
 Example code:
-```
+```YML
 settings:
   subDirectory: stl
 import:
@@ -52,3 +52,5 @@ Note that there are no instruction here to color them or move/rotate them. It's 
  `movedBOTTOM.stl` is the name of the file that will be imported as `C:\GIT\MyProject\stl\movedBOTTOM.stl` file. When imported it will be assigned blue color because array [0, 0, 1] represents #0000FF color.
  You can also use well known names like in the next file. `movedFRONT.stl` will be added to the document and painted red.
 
+# End result
+To be continued...
