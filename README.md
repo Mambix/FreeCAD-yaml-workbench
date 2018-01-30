@@ -1,7 +1,7 @@
 # Problem
 When I work with my ideas that live in DXF files and need to be cut from plywood with the help of CO2 laser.
-I ran into a small problem. I don't have a CO2 laser cutter so the design had to be solid or it would cost me a fortune
-to tune the designs with trial and error. My other python tool called [co2tools](https://github.com/Mambix/co2tools) allowed me to create STL files from my DXF drawings.
+I ran into a small problem. I don't own a CO2 laser cutter so the designs have to be solid or it would cost me a fortune
+to tune the designs by trial and error. My other python tool called [co2tools](https://github.com/Mambix/co2tools) allowed me to create STL files from my DXF drawings.
 
 # Idea
 Now I had to visualise the parts somehow to see if they fit together. I already used FreeCAD a lot as I use it to design 3D parts that I print on my 3D printer.
@@ -10,10 +10,10 @@ a simple macros that imported files for me, moved them if needed and applied col
 
 # Solution
 FreeCAD uses python internally as scripting language. Briliant! So all I needed to write is a workspace plugin that will load parts from YAML file.
-Which is exactly what I did. This python code adds new import filter to FreeCAD, giving the user an option to load and manipulate objects from YAML file.
+**Which is exactly what I did!** This python code adds **new import filter to FreeCAD**, giving the user an option to load and manipulate objects from YAML file.
  That way the process can be fairly well automated, making it easier to design and check 3D parts before manufacturing. Hopefully lowering costs in the process.
 
-# Instalation
+# Installation
 In essence you need to find your Mod folder or create one if it does not exist. And clone this repository.
 You will get a new folder called yaml-workspace in Mod folder. FreeCAD has good very tutorial on this topic [here](https://www.freecadweb.org/wiki/How_to_install_additional_workbenches).
 It explains in detail how to do it based on what platform you're working on.
