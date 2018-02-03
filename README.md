@@ -55,4 +55,4 @@ Note that there are no instruction here to color them or move/rotate them. It's 
  You can also use well known names like in the next file. `movedFRONT.stl` will be added to the document and painted red.
 
 # End result
-To be continued...
+[![IMAGE ALT TEXT](http://img.youtube.com/vi/PO6Uz16cdP8/0.jpg)](http://www.youtube.com/watch?v=PO6Uz16cdP8 "Video Title")
