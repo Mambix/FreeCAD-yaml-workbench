@@ -33,6 +33,9 @@ def insertMesh(directory, filename, document, document_name, group, attributes =
         transparency = getTransparency(attributes)
         if transparency:
             new_mesh.ViewObject.Transparency = transparency
+        placement = getPlacement(attributes)
+        rotation = getRotation(attributes)
+        new_mesh.Placement = App.Placement(placement, rotation)
     group.addObject(new_mesh)
 
 def getColor(json_data):
@@ -47,6 +50,18 @@ def getColor(json_data):
 
 def getTransparency(json_data):
     return json_data.get('transparency', None)
+
+def getPlacement(json_data):
+    placement = App.Vector(.0, .0, .0)
+    placement_config = json_data.get('placement', None)
+    if placement_config:
+        placement = App.Vector(*placement_config)
+    return placement
+
+def getRotation(json_data):
+    rotation_vector = json_data.get('rotationVector', (.0, .0, 1.0))
+    rotation_angle = json_data.get('rotationAngle', 0.0)
+    return App.Rotation(App.Vector(*rotation_vector), rotation_angle)
 
 def open(filename):
     base_directory = os.path.dirname(filename)
