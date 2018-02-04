@@ -68,7 +68,7 @@ When opening issues I only ask that you give as much information as possible. Sh
 The more information I get the faster I can figure out what the problem is and fix it.
 
 # Donations
-You can also support this project by donating **Ethereum or any ERC20 tokens**.
+You can also support this project by donating **Ethereum or any ERC20 tokens**.  
 ETH Wallet Address: 0x91400083bf0DaC3474B70550662D32473Ab97d3b  
   
 ![0x91400083bf0DaC3474B70550662D32473Ab97d3b](https://s3-eu-west-1.amazonaws.com/backup.red-mamba.com/ETH/0x91400083bf0DaC3474B70550662D32473Ab97d3b.png)  
