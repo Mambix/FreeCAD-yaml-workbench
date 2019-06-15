@@ -76,6 +76,10 @@ I tested it on my projects and it looks like it is working good enough to be rel
 When opening issues I only ask that you give as much information as possible. Share your YAML file in the opened issue.
 The more information I get the faster I can figure out what the problem is and fix it.
 
+## Developers
+Addon creator: [@Mambix](https://github.com/Mambix)  
+Logo creator: @bitacovir via [FreeCAD community](https://forum.freecadweb.org/viewtopic.php?f=34&t=37049) 
+
 ## Donations
 You can also support this project by donating **Ethereum or any ERC20 tokens**.  
 ETH Wallet Address: 0x91400083bf0DaC3474B70550662D32473Ab97d3b  
