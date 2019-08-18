@@ -1,4 +1,4 @@
-# YAML Workspace
+# YAML Workbench
 A FreeCAD addon that loads and manipulates objects via YAML
 
 ## Problem
@@ -10,7 +10,7 @@ to tune the designs by trial and error. My other python tool called [co2tools](h
 Now I had to visualise the parts somehow to see if they fit together. I already use FreeCAD a lot as I use it to design 3D parts that I print on my 3D printer. So it was a no brainer to include it in my workflow. But how to easily load the files into FreeCAD? My first python scripts, before I refactored them and published them on gitHub, were simple FreeCAD macros that imported files for me, moved them if needed and applied color to them. But I wanted to go the YAML way as I already used it as my approach for the [co2tools](https://github.com/Mambix/co2tools) python library (my other project as mentioned above). 
 
 ## Solution
-FreeCAD uses python internally as scripting language. Briliant! So all I needed to write is a workspace plugin that will load parts from YAML file.
+FreeCAD uses python internally as scripting language. Briliant! So all I needed to write is a workbench plugin that will load parts from YAML file.
 **Which is exactly what I did!** This python code adds **new import filter to FreeCAD**, giving the user an option to load and manipulate objects from YAML file.
  That way the process can be fairly well automated, making it easier to design and check 3D parts before manufacturing. Hopefully lowering costs in the process.
 
@@ -26,7 +26,7 @@ Found in **Tools -> Addon Manager**
 In essence you need to: 
 * Find your `Mod/` sub-folder or create one if it does not exist
 * Clone this repository
-* You will see a new folder called `yaml-workspace` in the `Mod` folder. FreeCAD has good very tutorial on this topic [here](https://www.freecadweb.org/wiki/How_to_install_additional_workbenches).
+* You will see a new folder called `yaml-workbench` in the `Mod` folder. FreeCAD has good very tutorial on this topic [here](https://www.freecadweb.org/wiki/How_to_install_additional_workbenches).
 It explains in detail how to do it based on what platform you're working on.
 
 ## Usage
