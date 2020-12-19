@@ -1,12 +1,18 @@
 import os
+import sys
 import FreeCAD as App, Mesh
 from yaml import load
 
 if App.GuiUp:
     import FreeCADGui as Gui
 
-if open.__module__ == '__builtin__': pythonopen = open
 
+if not sys.version_info.major == 3:
+    print("This script requires Python 3.x")
+    print("You are using Python {}.{}.".format(sys.version_info.major, sys.version_info.minor))
+    sys.exit(1)
+
+pythonopen = open
 predefined_colors = {
     'red': (1.0, 0.0, 0.0),
     'darkGed': (0.67, 0.0, 0.0),
@@ -22,6 +28,7 @@ predefined_colors = {
     'gray': (0.5, 0.5, 0.5),
     'darkGray': (0.25, 0.25, 0.25),
 }
+
 
 def insertMesh(directory, filename, document, document_name, group, attributes = None):
     Mesh.insert(u'{}/{}'.format(directory, filename), document_name)
@@ -70,7 +77,7 @@ def open(filename):
     print('Base: {}'.format(base_directory))
 
     yaml_data = None
-    with pythonopen(filename, 'r') as f:
+    with pythonopen(filename) as f:
         yaml_data = load(f)
 
     if yaml_data is None:
@@ -87,13 +94,13 @@ def open(filename):
 
     yaml_data = yaml_data['import']
 
-    for document_name, document_data in yaml_data.iteritems():
+    for document_name, document_data in yaml_data.items():
         document = App.newDocument(document_name)
 
-        for group_name, group_data in document_data.iteritems():
+        for group_name, group_data in document_data.items():
             document_group = document.addObject("App::DocumentObjectGroup", group_name)
 
-            if isinstance(group_data, basestring):
+            if isinstance(group_data, str):
                 insertMesh(base_directory, group_data, document, document_name, document_group)
                 continue
 
@@ -102,7 +109,7 @@ def open(filename):
                     insertMesh(base_directory, file, document, document_name, document_group)
                 continue
 
-            for file, file_data in group_data.iteritems():
+            for file, file_data in group_data.items():
                 if file == 'files':
                     for f in file_data:
                         insertMesh(base_directory, f, document, document_name, document_group)
