@@ -30,9 +30,14 @@ predefined_colors = {
 }
 
 
-def insertMesh(directory, filename, document, document_name, group, attributes = None):
-    Mesh.insert(u'{}/{}'.format(directory, filename), document_name)
-    new_mesh = document.getObject(filename[:-4])
+def insertMesh(directory, filename, document, group, attributes = None):
+    mesh = Mesh.Mesh(u'{}/{}'.format(directory, filename))
+    object_name = filename[:-4]
+    if 'objectName' in attributes:
+        object_name = attributes['objectName']
+    new_mesh = document.addObject("Mesh::Feature", object_name)
+    new_mesh.Mesh = mesh
+    print(attributes)
     if attributes:
         color = getColor(attributes)
         if color:
@@ -101,20 +106,25 @@ def open(filename):
             document_group = document.addObject("App::DocumentObjectGroup", group_name)
 
             if isinstance(group_data, str):
-                insertMesh(base_directory, group_data, document, document_name, document_group)
+                insertMesh(base_directory, group_data, document, document_group)
                 continue
 
             if isinstance(group_data, list):
                 for file in group_data:
-                    insertMesh(base_directory, file, document, document_name, document_group)
+                    insertMesh(base_directory, file, document, document_group)
                 continue
 
             for file, file_data in group_data.items():
                 if file == 'files':
                     for f in file_data:
-                        insertMesh(base_directory, f, document, document_name, document_group)
+                        insertMesh(base_directory, f, document, document_group)
                     continue
-                insertMesh(base_directory, file, document, document_name, document_group, file_data)
+                if not isinstance(file_data, list):
+                    insertMesh(base_directory, file, document, document_group, file_data)
+                else:
+                    for file_data2 in file_data:
+                        insertMesh(base_directory, file, document, document_group, file_data2)
+                # insertMesh(base_directory, file, document, document_group, file_data)
         document.recompute()
     Gui.activeDocument().activeView().viewAxonometric()
     Gui.SendMsgToActiveView("ViewFit")
