@@ -37,7 +37,6 @@ def insertMesh(directory, filename, document, group, attributes = None):
         object_name = attributes['objectName']
     new_mesh = document.addObject("Mesh::Feature", object_name)
     new_mesh.Mesh = mesh
-    print(attributes)
     if attributes:
         color = getColor(attributes)
         if color:
@@ -49,6 +48,27 @@ def insertMesh(directory, filename, document, group, attributes = None):
         rotation = getRotation(attributes)
         new_mesh.Placement = App.Placement(placement, rotation)
     group.addObject(new_mesh)
+
+def insertSolid(name, document, group, attributes):
+    if attributes['solid'] == 'cylinder':
+        return insertCylinder(name, document, group, attributes)
+    print('ERROR: Unsupported solid tyle {}'.format(attributes['solid']))
+
+def insertCylinder(name, document, group, attributes):
+    solid = document.addObject("Part::Cylinder","Cylinder")
+    solid.Label = name
+    solid.Radius = '{} mm'.format(attributes['radius'])
+    solid.Height = '{} mm'.format(attributes['height'])
+    color = getColor(attributes)
+    if color:
+        solid.ViewObject.ShapeColor = color
+    transparency = getTransparency(attributes)
+    if transparency:
+        solid.ViewObject.Transparency = transparency
+    placement = getPlacement(attributes)
+    rotation = getRotation(attributes)
+    solid.Placement = App.Placement(placement, rotation)
+    group.addObject(solid)
 
 def getColor(json_data):
     color_data = json_data.get('color', None)
@@ -120,11 +140,13 @@ def open(filename):
                         insertMesh(base_directory, f, document, document_group)
                     continue
                 if not isinstance(file_data, list):
-                    insertMesh(base_directory, file, document, document_group, file_data)
+                    if 'solid' not in file_data:
+                        insertMesh(base_directory, file, document, document_group, file_data)
+                    else:
+                        insertSolid(file, document, document_group, file_data)
                 else:
                     for file_data2 in file_data:
                         insertMesh(base_directory, file, document, document_group, file_data2)
-                # insertMesh(base_directory, file, document, document_group, file_data)
         document.recompute()
     Gui.activeDocument().activeView().viewAxonometric()
     Gui.SendMsgToActiveView("ViewFit")
