@@ -30,9 +30,13 @@ predefined_colors = {
 }
 
 
-def insertMesh(directory, filename, document, document_name, group, attributes = None):
-    Mesh.insert(u'{}/{}'.format(directory, filename), document_name)
-    new_mesh = document.getObject(filename[:-4])
+def insertMesh(directory, filename, document, group, attributes = None):
+    mesh = Mesh.Mesh(u'{}/{}'.format(directory, filename))
+    object_name = filename[:-4]
+    if 'objectName' in attributes:
+        object_name = attributes['objectName']
+    new_mesh = document.addObject("Mesh::Feature", object_name)
+    new_mesh.Mesh = mesh
     if attributes:
         color = getColor(attributes)
         if color:
@@ -44,6 +48,172 @@ def insertMesh(directory, filename, document, document_name, group, attributes =
         rotation = getRotation(attributes)
         new_mesh.Placement = App.Placement(placement, rotation)
     group.addObject(new_mesh)
+
+def insertSolid(name, document, group, attributes):
+    if attributes['solid'] == 'cylinder':
+        return insertCylinder(name, document, group, attributes)
+    print('ERROR: Unsupported solid tyle {}'.format(attributes['solid']))
+
+def insertCylinder(name, document, group, attributes):
+    solid = document.addObject("Part::Cylinder","Cylinder")
+    solid.Label = name
+    solid.Radius = '{} mm'.format(attributes['radius'])
+    solid.Height = '{} mm'.format(attributes['height'])
+    if 'angle' in attributes:
+        solid.Angle = '{} deg'.format(attributes['angle'])
+    color = getColor(attributes)
+    if color:
+        solid.ViewObject.ShapeColor = color
+    transparency = getTransparency(attributes)
+    if transparency:
+        solid.ViewObject.Transparency = transparency
+    placement = getPlacement(attributes)
+    rotation = getRotation(attributes)
+    solid.Placement = App.Placement(placement, rotation)
+    group.addObject(solid)
+
+def insertSphere(name, document, group, attributes):
+    solid = document.addObject("Part::Sphere","Sphere")
+    solid.Label = name
+    solid.Radius = '{} mm'.format(attributes['radius'])
+    if 'angle1' in attributes:
+        solid.Angle1 = '{} deg'.format(attributes['angle1'])
+    if 'angle2' in attributes:
+        solid.Angle2 = '{} deg'.format(attributes['angle2'])
+    if 'angle3' in attributes:
+        solid.Angle3 = '{} deg'.format(attributes['angle3'])
+    color = getColor(attributes)
+    if color:
+        solid.ViewObject.ShapeColor = color
+    transparency = getTransparency(attributes)
+    if transparency:
+        solid.ViewObject.Transparency = transparency
+    placement = getPlacement(attributes)
+    rotation = getRotation(attributes)
+    solid.Placement = App.Placement(placement, rotation)
+    group.addObject(solid)
+
+def insertEllipsoid(name, document, group, attributes):
+    solid = document.addObject("Part::Ellipsoid","Ellipsoid")
+    solid.Label = name
+    solid.Radius1 = '{} mm'.format(attributes['radius1'])
+    solid.Radius2 = '{} mm'.format(attributes['radius2'])
+    solid.Radius3 = '{} mm'.format(attributes['radius3'])
+    if 'angle1' in attributes:
+        solid.Angle1 = '{} deg'.format(attributes['angle1'])
+    if 'angle2' in attributes:
+        solid.Angle2 = '{} deg'.format(attributes['angle2'])
+    if 'angle3' in attributes:
+        solid.Angle3 = '{} deg'.format(attributes['angle3'])
+    color = getColor(attributes)
+    if color:
+        solid.ViewObject.ShapeColor = color
+    transparency = getTransparency(attributes)
+    if transparency:
+        solid.ViewObject.Transparency = transparency
+    placement = getPlacement(attributes)
+    rotation = getRotation(attributes)
+    solid.Placement = App.Placement(placement, rotation)
+    group.addObject(solid)
+
+def insertBox(name, document, group, attributes):
+    solid = document.addObject("Part::Box","Box")
+    solid.Label = name
+    solid.Length = '{} mm'.format(attributes['length'])
+    solid.Width = '{} mm'.format(attributes['width'])
+    solid.Height = '{} mm'.format(attributes['height'])
+    color = getColor(attributes)
+    if color:
+        solid.ViewObject.ShapeColor = color
+    transparency = getTransparency(attributes)
+    if transparency:
+        solid.ViewObject.Transparency = transparency
+    placement = getPlacement(attributes)
+    rotation = getRotation(attributes)
+    solid.Placement = App.Placement(placement, rotation)
+    group.addObject(solid)
+
+def insertCone(name, document, group, attributes):
+    solid = document.addObject("Part::Cone","Cone")
+    solid.Label = name
+    solid.Radius1 = '{} mm'.format(attributes['radius1'])
+    solid.Radius2 = '{} mm'.format(attributes['radius2'])
+    solid.Height = '{} mm'.format(attributes['height'])
+    if 'angle' in attributes:
+        solid.Angle = '{} deg'.format(attributes['angle'])
+    color = getColor(attributes)
+    if color:
+        solid.ViewObject.ShapeColor = color
+    transparency = getTransparency(attributes)
+    if transparency:
+        solid.ViewObject.Transparency = transparency
+    placement = getPlacement(attributes)
+    rotation = getRotation(attributes)
+    solid.Placement = App.Placement(placement, rotation)
+    group.addObject(solid)
+
+def insertTorus(name, document, group, attributes):
+    solid = document.addObject("Part::Torus","Torus")
+    solid.Label = name
+    solid.Radius1 = '{} mm'.format(attributes['radius1'])
+    solid.Radius2 = '{} mm'.format(attributes['radius2'])
+    if 'angle1' in attributes:
+        solid.Angle1 = '{} deg'.format(attributes['angle1'])
+    if 'angle2' in attributes:
+        solid.Angle2 = '{} deg'.format(attributes['angle2'])
+    if 'angle3' in attributes:
+        solid.Angle3 = '{} deg'.format(attributes['angle3'])
+    color = getColor(attributes)
+    if color:
+        solid.ViewObject.ShapeColor = color
+    transparency = getTransparency(attributes)
+    if transparency:
+        solid.ViewObject.Transparency = transparency
+    placement = getPlacement(attributes)
+    rotation = getRotation(attributes)
+    solid.Placement = App.Placement(placement, rotation)
+    group.addObject(solid)
+
+def insertPrism(name, document, group, attributes):
+    solid = document.addObject("Part::Prism","Prism")
+    solid.Label = name
+    solid.Polygon = '{}'.format(attributes['polygon'])
+    solid.Circumradius = '{} mm'.format(attributes['radius'])
+    solid.Height = '{} mm'.format(attributes['Height'])
+    color = getColor(attributes)
+    if color:
+        solid.ViewObject.ShapeColor = color
+    transparency = getTransparency(attributes)
+    if transparency:
+        solid.ViewObject.Transparency = transparency
+    placement = getPlacement(attributes)
+    rotation = getRotation(attributes)
+    solid.Placement = App.Placement(placement, rotation)
+    group.addObject(solid)
+
+def insertWedge(name, document, group, attributes):
+    solid = document.addObject("Part::Wedge","Wedge")
+    solid.Label = name
+    solid.Xmin = '{} mm'.format(attributes['xmin'])
+    solid.Ymin = '{} mm'.format(attributes['ymin'])
+    solid.Zmin = '{} mm'.format(attributes['zmin'])
+    solid.X2min = '{} mm'.format(attributes['x2min'])
+    solid.Z2min = '{} mm'.format(attributes['z2min'])
+    solid.Xmax = '{} mm'.format(attributes['xmax'])
+    solid.Ymax = '{} mm'.format(attributes['ymax'])
+    solid.Zmax = '{} mm'.format(attributes['zmax'])
+    solid.X2max = '{} mm'.format(attributes['x2max'])
+    solid.Z2max = '{} mm'.format(attributes['z2max'])
+    color = getColor(attributes)
+    if color:
+        solid.ViewObject.ShapeColor = color
+    transparency = getTransparency(attributes)
+    if transparency:
+        solid.ViewObject.Transparency = transparency
+    placement = getPlacement(attributes)
+    rotation = getRotation(attributes)
+    solid.Placement = App.Placement(placement, rotation)
+    group.addObject(solid)
 
 def getColor(json_data):
     color_data = json_data.get('color', None)
@@ -101,20 +271,27 @@ def open(filename):
             document_group = document.addObject("App::DocumentObjectGroup", group_name)
 
             if isinstance(group_data, str):
-                insertMesh(base_directory, group_data, document, document_name, document_group)
+                insertMesh(base_directory, group_data, document, document_group)
                 continue
 
             if isinstance(group_data, list):
                 for file in group_data:
-                    insertMesh(base_directory, file, document, document_name, document_group)
+                    insertMesh(base_directory, file, document, document_group)
                 continue
 
             for file, file_data in group_data.items():
                 if file == 'files':
                     for f in file_data:
-                        insertMesh(base_directory, f, document, document_name, document_group)
+                        insertMesh(base_directory, f, document, document_group)
                     continue
-                insertMesh(base_directory, file, document, document_name, document_group, file_data)
+                if not isinstance(file_data, list):
+                    if 'solid' not in file_data:
+                        insertMesh(base_directory, file, document, document_group, file_data)
+                    else:
+                        insertSolid(file, document, document_group, file_data)
+                else:
+                    for file_data2 in file_data:
+                        insertMesh(base_directory, file, document, document_group, file_data2)
         document.recompute()
     Gui.activeDocument().activeView().viewAxonometric()
     Gui.SendMsgToActiveView("ViewFit")
