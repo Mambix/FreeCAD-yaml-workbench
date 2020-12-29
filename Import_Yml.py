@@ -1,6 +1,6 @@
 import os
 import sys
-import FreeCAD as App, Mesh
+import FreeCAD as App, Mesh, Part
 from yaml import load
 
 if App.GuiUp:
@@ -15,7 +15,7 @@ if not sys.version_info.major == 3:
 pythonopen = open
 predefined_colors = {
     'red': (1.0, 0.0, 0.0),
-    'darkGed': (0.67, 0.0, 0.0),
+    'darkRed': (0.67, 0.0, 0.0),
     'green': (0.0, 1.0, 0.0),
     'darkGreen': (0.0, 0.67, 0.0),
     'blue': (0.0, 0.0, 1.0),
@@ -27,8 +27,19 @@ predefined_colors = {
     'lightGray': (0.75, 0.75, 0.75),
     'gray': (0.5, 0.5, 0.5),
     'darkGray': (0.25, 0.25, 0.25),
+    'black': (0.0, 0.0, 0.0),
 }
 
+
+def insertObject(directory, filename, document, group, attributes = None):
+    if not os.path.isfile(os.path.join(directory, filename)):
+        directory = os.path.expanduser('~/.FreeCAD/Mod/yaml-workspace')
+        if not os.path.isfile(os.path.join(directory, filename)):
+            print('ERROR: `{}` not found!'.format(filename))
+            return
+    if filename[-4:] in ['.stp', '.igs', 'iges', 'step']:
+        return insertPart(directory, filename, document, group, attributes)
+    insertMesh(directory, filename, document, group, attributes)
 
 def insertMesh(directory, filename, document, group, attributes = None):
     mesh = Mesh.Mesh(u'{}/{}'.format(directory, filename))
@@ -49,9 +60,49 @@ def insertMesh(directory, filename, document, group, attributes = None):
         new_mesh.Placement = App.Placement(placement, rotation)
     group.addObject(new_mesh)
 
+def insertPart(directory, filename, document, group, attributes = None):
+    if not os.path.isfile(os.path.join(directory, filename)):
+        directory = os.path.expanduser('~/.FreeCAD/Mod/yaml-workspace')
+        if not os.path.isfile(os.path.join(directory, filename)):
+            print('ERROR: `{}` not found!'.format(filename))
+            return
+
+    part = Part.Shape()
+    part = Part.read(u'{}/{}'.format(directory, filename))
+    object_name = filename[:-4]
+    if 'objectName' in attributes:
+        object_name = attributes['objectName']
+    new_part = document.addObject("Part::Feature", object_name)
+    new_part.Shape = part
+    if attributes:
+        color = getColor(attributes)
+        if color:
+            new_part.ViewObject.ShapeColor = color
+        transparency = getTransparency(attributes)
+        if transparency:
+            new_part.ViewObject.Transparency = transparency
+        placement = getPlacement(attributes)
+        rotation = getRotation(attributes)
+        new_part.Placement = App.Placement(placement, rotation)
+    group.addObject(new_part)
+
 def insertSolid(name, document, group, attributes):
     if attributes['solid'] == 'cylinder':
         return insertCylinder(name, document, group, attributes)
+    if attributes['solid'] == 'sphere':
+        return insertSphere(name, document, group, attributes)
+    if attributes['solid'] == 'ellipsoid':
+        return insertEllipsoid(name, document, group, attributes)
+    if attributes['solid'] == 'box':
+        return insertBox(name, document, group, attributes)
+    if attributes['solid'] == 'cone':
+        return insertCone(name, document, group, attributes)
+    if attributes['solid'] == 'torus':
+        return insertTorus(name, document, group, attributes)
+    if attributes['solid'] == 'prism':
+        return insertPrism(name, document, group, attributes)
+    if attributes['solid'] == 'wedge':
+        return insertWedge(name, document, group, attributes)
     print('ERROR: Unsupported solid tyle {}'.format(attributes['solid']))
 
 def insertCylinder(name, document, group, attributes):
@@ -271,27 +322,27 @@ def open(filename):
             document_group = document.addObject("App::DocumentObjectGroup", group_name)
 
             if isinstance(group_data, str):
-                insertMesh(base_directory, group_data, document, document_group)
+                insertObject(base_directory, group_data, document, document_group)
                 continue
 
             if isinstance(group_data, list):
                 for file in group_data:
-                    insertMesh(base_directory, file, document, document_group)
+                    insertObject(base_directory, file, document, document_group)
                 continue
 
             for file, file_data in group_data.items():
                 if file == 'files':
                     for f in file_data:
-                        insertMesh(base_directory, f, document, document_group)
+                        insertObject(base_directory, f, document, document_group)
                     continue
                 if not isinstance(file_data, list):
                     if 'solid' not in file_data:
-                        insertMesh(base_directory, file, document, document_group, file_data)
+                        insertObject(base_directory, file, document, document_group, file_data)
                     else:
                         insertSolid(file, document, document_group, file_data)
                 else:
                     for file_data2 in file_data:
-                        insertMesh(base_directory, file, document, document_group, file_data2)
+                        insertObject(base_directory, file, document, document_group, file_data2)
         document.recompute()
     Gui.activeDocument().activeView().viewAxonometric()
     Gui.SendMsgToActiveView("ViewFit")
