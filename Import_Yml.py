@@ -52,6 +52,20 @@ def insertMesh(directory, filename, document, group, attributes = None):
 def insertSolid(name, document, group, attributes):
     if attributes['solid'] == 'cylinder':
         return insertCylinder(name, document, group, attributes)
+    if attributes['solid'] == 'sphere':
+        return insertSphere(name, document, group, attributes)
+    if attributes['solid'] == 'ellipsoid':
+        return insertEllipsoid(name, document, group, attributes)
+    if attributes['solid'] == 'box':
+        return insertBox(name, document, group, attributes)
+    if attributes['solid'] == 'cone':
+        return insertCone(name, document, group, attributes)
+    if attributes['solid'] == 'torus':
+        return insertTorus(name, document, group, attributes)
+    if attributes['solid'] == 'prism':
+        return insertPrism(name, document, group, attributes)
+    if attributes['solid'] == 'wedge':
+        return insertWedge(name, document, group, attributes)
     print('ERROR: Unsupported solid tyle {}'.format(attributes['solid']))
 
 def insertCylinder(name, document, group, attributes):
