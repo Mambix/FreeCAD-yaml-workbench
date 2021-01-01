@@ -94,6 +94,78 @@ With the support for common library folder there was also a new fearture added t
 Before you were limited to importing Meshes from .stl files. This logic was now uptated in a way that if the file
 ends with `.stp`, `.igs`, `.iges` or `.step`.
 
+### Simple solids
+It is now possible to insert simple objects like `cylinder`, `sphere`, `ellipsoid`, `box`, `cone`, `torus`, `prism` and `wedge`.
+
+Examples (`color`, `transparency`, `placement`, `rotationAngle`, and `rotationVector` are available to all imported object):
+```yaml
+import:
+  DocumentName:
+    GroupName:
+      CYLINDER_NAME:
+        solid: cylinder
+        radius: 6.0
+        height: 410.0
+        angle: 120 #optional
+        placement: [.0, .0, .0]
+      SPHERE_NAME:
+        solid: sphere
+        radius: 6.0
+        angle1: 45 #optional
+        angle2: 120 #optional
+        angle3: 180 #optional
+        placement: [.0, .0, .0]
+      ELLIPSOID_NAME:
+        solid: ellipsoid
+        radius1: 6.0
+        radius2: 12.0
+        radius3: 9.0
+        angle1: 45 #optional
+        angle2: 120 #optional
+        angle3: 180 #optional
+        placement: [.0, .0, .0]
+      BOX_NAME:
+        solid: box
+        length: 6.0
+        width: 24.0
+        height: 12.0
+        placement: [.0, .0, .0]
+      CONE_NAME:
+        solid: cone
+        radius1: 6.0
+        radius2: 12.0
+        height: 12.0
+        angle: 120 #optional
+        placement: [.0, .0, .0]
+      TORUS_NAME:
+        solid: torus
+        radius1: 6.0
+        radius2: 12.0
+        angle1: 45 #optional
+        angle2: 120 #optional
+        angle3: 180 #optional
+        placement: [.0, .0, .0]
+      PRISM_NAME:
+        solid: prism
+        polygon: 6 #hexagon
+        radius: 12.0
+        height: 24.0
+        placement: [.0, .0, .0]
+      WEDGE_NAME:
+        solid: wedge
+        xmin: 6.0
+        ymin: 12.0
+        zmin: 24.0
+        x2min: 15.0
+        y2min: 16.0
+        xmax: 36.0
+        ymax: 42.0
+        zmax: 54.0
+        x2max: 115.0
+        y2max: 116.0
+        placement: [.0, .0, .0]
+```
+
 ## End result
 [![IMAGE ALT TEXT](http://img.youtube.com/vi/PO6Uz16cdP8/0.jpg)](http://www.youtube.com/watch?v=PO6Uz16cdP8 "Video Title")
 
