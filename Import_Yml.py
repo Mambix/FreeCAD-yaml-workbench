@@ -1,7 +1,7 @@
 import os
 import sys
 import FreeCAD as App, Mesh, Part
-from yaml import load
+from yaml import safe_load
 
 if App.GuiUp:
     import FreeCADGui as Gui
@@ -299,7 +299,7 @@ def open(filename):
 
     yaml_data = None
     with pythonopen(filename) as f:
-        yaml_data = load(f)
+        yaml_data = safe_load(f)
 
     if yaml_data is None:
         raise Exception("Error reading YAML file: {}".format(filename))
