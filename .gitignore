@@ -156,7 +156,7 @@ config.json
 uwsgi.ini
 smn.conf
 config.ini
-*.xml
+# *.xml
 src/flask_session/
 src/flask_website/templates/version.html
 src/build.number
