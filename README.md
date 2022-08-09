@@ -194,5 +194,11 @@ ETH Wallet Address: 0x91400083bf0DaC3474B70550662D32473Ab97d3b
 
 **Contributions of any size are welcome. Thank you!**
 
+## Release notes
+
+* 2022.08.09 (**0.1.0**) :  
+Added package.xml file required by FreeCAD  
+Fixed unsafe yaml loading varning  
+
 ## License
 GNU Lesser General Public License v2.1
