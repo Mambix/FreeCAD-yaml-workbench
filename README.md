@@ -158,11 +158,13 @@ import:
         zmin: 24.0
         x2min: 15.0
         y2min: 16.0
+        z2min: 17.0
         xmax: 36.0
         ymax: 42.0
         zmax: 54.0
         x2max: 115.0
         y2max: 116.0
+        z2max: 117.0
         placement: [.0, .0, .0]
 ```
 
@@ -195,6 +197,10 @@ ETH Wallet Address: 0x91400083bf0DaC3474B70550662D32473Ab97d3b
 **Contributions of any size are welcome. Thank you!**
 
 ## Release notes
+
+* 2022.08.16 (**0.1.2**) :    
+Fixed adding simple solid of type wedge  
+Fix `SimpleSolids.yml` example  
 
 * 2022.08.16 (**0.1.1**) :    
 Fixed adding simple solid of type prism  

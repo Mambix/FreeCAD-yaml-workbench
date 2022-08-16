@@ -57,9 +57,11 @@ import:
         zmin: 24.0
         x2min: 15.0
         y2min: 16.0
+        z2min: 17.0
         xmax: 36.0
         ymax: 42.0
         zmax: 54.0
         x2max: 115.0
         y2max: 116.0
+        z2max: 117.0
         placement: [.0, .0, .0]

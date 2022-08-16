@@ -230,7 +230,7 @@ def insertPrism(name, document, group, attributes):
     solid.Label = name
     solid.Polygon = int(attributes['polygon'])
     solid.Circumradius = '{} mm'.format(attributes['radius'])
-    solid.Height = '{} mm'.format(attributes['Height'])
+    solid.Height = '{} mm'.format(attributes['height'])
     color = getColor(attributes)
     if color:
         solid.ViewObject.ShapeColor = color
