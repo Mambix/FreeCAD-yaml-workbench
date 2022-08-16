@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <package format="1" xmlns="https://wiki.freecad.org/Package_Metadata">
   <name>Yaml Workbench</name>
-  <version>0.1.0</version>
+  <version>0.1.1</version>
   <date>2022-09-08</date>
   <description>A FreeCAD addon that loads and manipulates objects via YAML files.</description>
   <maintainer email="ledi.mambix@gmail.com">FrontISTR-Commons</maintainer>
@@ -17,7 +17,7 @@
     <workbench>
       <icon>Resources/YAML_workbench_icon.svg</icon>
       <subdirectory>./</subdirectory>
-      <classname>FemToolsFISTR</classname>
+      <classname>Import_Yml</classname>
       <tag>Mambix</tag>
       <tag>import</tag>
       <tag>yaml</tag>

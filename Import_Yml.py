@@ -228,7 +228,7 @@ def insertTorus(name, document, group, attributes):
 def insertPrism(name, document, group, attributes):
     solid = document.addObject("Part::Prism","Prism")
     solid.Label = name
-    solid.Polygon = '{}'.format(attributes['polygon'])
+    solid.Polygon = int(attributes['polygon'])
     solid.Circumradius = '{} mm'.format(attributes['radius'])
     solid.Height = '{} mm'.format(attributes['Height'])
     color = getColor(attributes)
