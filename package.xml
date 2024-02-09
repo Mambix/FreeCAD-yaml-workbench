@@ -5,7 +5,7 @@
   <date>2022-09-08</date>
   <description>A FreeCAD addon that loads and manipulates objects via YAML files.</description>
   <maintainer email="ledi.mambix@gmail.com">MambiX Ltd.</maintainer>
-  <license file="LICENSE">LGPLv2.1</license>
+  <license file="LICENSE">LGPL-2.1-or-later</license>
   <url type="repository" branch="master">https://github.com/Mambix/FreeCAD-yaml-workbench</url>
   <url type="bugtracker">https://github.com/Mambix/FreeCAD-yaml-workbench/issues</url>
   <url type="documentation">https://github.com/Mambix/FreeCAD-yaml-workbench/blob/master/README.md</url>
