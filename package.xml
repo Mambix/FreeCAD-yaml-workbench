@@ -9,13 +9,13 @@
   <url type="repository" branch="master">https://github.com/Mambix/FreeCAD-yaml-workbench</url>
   <url type="bugtracker">https://github.com/Mambix/FreeCAD-yaml-workbench/issues</url>
   <url type="documentation">https://github.com/Mambix/FreeCAD-yaml-workbench/blob/master/README.md</url>
-  <icon>Resources/YAML_workbench_icon.svg</icon>
+  <icon>Resources/icons/YAML_workbench_icon.svg</icon>
   <depend>PyYaml</depend>
   <freecadmin>0.19</freecadmin>
 
   <content>
     <workbench>
-      <icon>Resources/YAML_workbench_icon.svg</icon>
+      <icon>Resources/icons/YAML_workbench_icon.svg</icon>
       <subdirectory>./</subdirectory>
       <classname>Import_Yml</classname>
       <tag>Mambix</tag>
