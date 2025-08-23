@@ -1,8 +1,8 @@
 
 import FreeCAD as App , Mesh , Part
 
+from Accessors import getTransparency , getPlacement , getRotation , getColor
 from builtins import open as openFile
-from Colors import Colors
 from yaml import safe_load
 from sys import version_info as version , exit
 from os import path
@@ -233,43 +233,6 @@ def insertWedge(name, document, group, attributes):
     solid.Placement = App.Placement(placement, rotation)
     group.addObject(solid)
 
-def getColor ( data ):
-
-    color = data.get('color', None)
-    
-    if not color:
-        return None
-    
-    if isinstance(color,list):
-        return ( color[0] , color[1] , color[2] )
-
-    if color in Colors:
-        return Colors[ color ]
-    
-    raise Exception('Color data needs to be an array of RGB floats or one of predefined colors!')
-    
-
-def getTransparency(json_data):
-    return json_data.get('transparency', None)
-
-def getPlacement ( data ):
-    
-    config = data.get('placement',None)
-    
-    if config:
-        return App.Vector(*config)
-        
-    return App.Vector(0.0,0.0,0.0)
-
-
-def getRotation ( data ):
-
-    points = data.get('rotationVector',(0.0,0.0,1.0))
-    angle = data.get('rotationAngle',0.0)
-
-    vector = App.Vector(*points)
-
-    return App.Rotation(vector,angle)
 
 
 Shapes = {
