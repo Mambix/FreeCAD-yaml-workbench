@@ -2,69 +2,83 @@
 from Source.Parts import *
 from builtins import open as openFile
 from FreeCAD import newDocument , GuiUp
+from os.path import dirname , join
 from yaml import safe_load
-from os import path
 
 
 if GuiUp:
     import FreeCADGui as Gui # type: ignore
 
 
-def open(filename):
-    base_directory = path.dirname(filename)
-    print(f'Reading: { filename }')
-    print(f'Base: { base_directory }')
+def open ( path ):
 
-    yaml_data = None
-    with openFile(filename) as f:
-        yaml_data = safe_load(f)
+    folder = dirname(path)
+    
+    print(f'''Reading: '{ path }' ''')
+    print(f'''Base: '{ folder }' ''')
 
-    if yaml_data is None:
-        raise Exception(f'Error reading YAML file: { filename }')
+    data = None
 
-    print(f'YML data: { yaml_data }')
-    if 'settings' in yaml_data:
-        if 'subDirectory' in yaml_data[ "settings" ]:
+    with openFile(path) as file:
+        data = safe_load(file)
+
+    if data is None:
+        raise Exception(f'''Error reading YAML file: '{ path }' ''')
+
+    print(f'YAML data: { data }')
+
+    if 'settings' in data:
+        if 'subDirectory' in data[ 'settings' ]:
             
-            folder = yaml_data[ 'settings' ][ 'subDirectory' ]
+            subfolder = data[ 'settings' ][ 'subDirectory' ]
 
-            base_directory = path.join(base_directory,folder)
+            folder = join(folder,subfolder)
 
-            print(f'Base: { base_directory }')
+            print(f'''Base: '{ folder }' ''')
 
-    if 'import' not in yaml_data:
-        raise Exception('No \'import\' section in YAML file!!!')
+    if 'import' not in data:
+        raise Exception('''No 'import' section in YAML file!''')
 
-    yaml_data = yaml_data['import']
+    data = data[ 'import' ]
 
-    for document_name, document_data in yaml_data.items():
+    for document_name , document_data in data.items():
+
         document = newDocument(document_name)
 
-        for group_name, group_data in document_data.items():
-            document_group = document.addObject("App::DocumentObjectGroup", group_name)
+        for group_name , group_data in document_data.items():
 
-            if isinstance(group_data, str):
-                insertObject(base_directory, group_data, document, document_group)
+            group = document.addObject('App::DocumentObjectGroup',group_name)
+
+            if isinstance(group_data,str):
+                insertObject(folder,group_data,document,group)
                 continue
 
-            if isinstance(group_data, list):
+            if isinstance(group_data,list):
+                
                 for file in group_data:
-                    insertObject(base_directory, file, document, document_group)
+                    insertObject(folder,file,document,group)
+
                 continue
 
-            for file, file_data in group_data.items():
+            for file , file_data in group_data.items():
+
                 if file == 'files':
-                    for f in file_data:
-                        insertObject(base_directory, f, document, document_group)
+                
+                    for file in file_data:
+                        insertObject(folder,file,document,group)
                     continue
-                if not isinstance(file_data, list):
-                    if 'solid' not in file_data:
-                        insertObject(base_directory, file, document, document_group, file_data)
+
+                if not isinstance(file_data,list):
+
+                    if 'solid' in file_data:
+                        insertSolid(file,document,group,file_data)
                     else:
-                        insertSolid(file, document, document_group, file_data)
+                        insertObject(folder,file,document,group,file_data)
                 else:
+
                     for file_data2 in file_data:
-                        insertObject(base_directory, file, document, document_group, file_data2)
+                        insertObject(folder,file,document,group,file_data2)
+                        
         document.recompute()
 
     Gui.activeDocument().activeView().viewAxonometric() # type: ignore
