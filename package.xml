@@ -11,7 +11,8 @@
   <url type="documentation">https://github.com/Mambix/FreeCAD-yaml-workbench/blob/master/README.md</url>
   <icon>Resources/YAML_workbench_icon.svg</icon>
   <depend>PyYaml</depend>
-  <freecadmin>0.19</freecadmin>
+  <freecadmin>0.21</freecadmin>
+  <pythonmin>3.5</pythonmin>
 
   <content>
     <workbench>

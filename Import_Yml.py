@@ -4,18 +4,11 @@ import FreeCAD as App , Mesh , Part
 from Accessors import getTransparency , getPlacement , getRotation , getColor
 from builtins import open as openFile
 from yaml import safe_load
-from sys import version_info as version , exit
 from os import path
 
 
 if App.GuiUp:
     import FreeCADGui as Gui
-
-if not version.major == 3:
-    print('This script requires Python 3.x')
-    print(f'You are using Python { version.major }.{ version.minor }')
-    exit(1)
-
 
 def insertObject(directory, filename, document, group, attributes = None):
     if not path.isfile(path.join(directory, filename)):
