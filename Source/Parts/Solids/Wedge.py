@@ -1,5 +1,5 @@
 
-def insertWedge ( document , attributes ):
+def insertWedge ( document , data ):
 
     solid = document.addObject('Part::Wedge','Wedge')
 
@@ -11,6 +11,6 @@ def insertWedge ( document , attributes ):
     ]
 
     for key in keys:
-        setattr(solid,key, f'{ attributes[ key.lower() ] } mm' )
+        setattr(solid,key, f'{ data[ key.lower() ] } mm' )
 
     return solid

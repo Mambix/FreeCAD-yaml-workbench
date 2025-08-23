@@ -1,13 +1,13 @@
 
-def insertCone ( document , attributes ):
+def insertCone ( document , data ):
 
     solid = document.addObject('Part::Cone','Cone')
 
-    solid.Radius1 = f'{ attributes[ "radius1" ] } mm'
-    solid.Radius2 = f'{ attributes[ "radius2" ] } mm'
-    solid.Height = f'{ attributes[ "height" ] } mm'
+    solid.Radius1 = f'{ data[ "radius1" ] } mm'
+    solid.Radius2 = f'{ data[ "radius2" ] } mm'
+    solid.Height = f'{ data[ "height" ] } mm'
   
-    if 'angle' in attributes:
-        solid.Angle = f'{ attributes[ "angle" ] } deg'
+    if 'angle' in data:
+        solid.Angle = f'{ data[ "angle" ] } deg'
     
     return solid

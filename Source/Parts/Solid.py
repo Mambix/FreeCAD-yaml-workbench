@@ -3,7 +3,7 @@ from Source.Parts.Common import defineCommon
 from Source.Parts.Solids import *
 
 
-Shapes = {
+Solids = {
     'ellipsoid' : insertEllipsoid ,
     'cylinder' : insertCylinder ,
     'sphere' : insertSphere ,
@@ -15,17 +15,17 @@ Shapes = {
 }
 
 
-def insertSolid ( name , document , group , attributes ):
+def insertSolid ( name , document , group , data ):
     
-    type = attributes[ "solid" ]
+    type = data[ 'solid' ]
 
-    if not type in Shapes:
-        print(f'ERROR: Unsupported solid type { type }')
+    if not type in Solids:
+        print(f'''ERROR: Unsupported solid type '{ type }' ''')
         return
     
-    shape = Shapes[ type ](document,attributes)
-    shape.Label = name
+    solid = Solids[ type ](document,data)
+    solid.Label = name
 
-    defineCommon(shape,attributes)
+    defineCommon(solid,data)
 
-    group.addObject(shape)
+    group.addObject(solid)

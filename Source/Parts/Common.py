@@ -3,12 +3,12 @@ from Source.Getters import *
 from FreeCAD import Placement
 
 
-def defineCommon ( object , attributes ):
+def defineCommon ( object , data ):
 
-    transparency = getTransparency(attributes)
-    placement = getPlacement(attributes)
-    rotation = getRotation(attributes)
-    color = getColor(attributes)
+    transparency = getTransparency(data)
+    placement = getPlacement(data)
+    rotation = getRotation(data)
+    color = getColor(data)
 
 
     view = object.ViewObject

@@ -1,2 +1,8 @@
-# add YAML inport type
-FreeCAD.addImportType("YAML script (*.yml)","Import_Yml")
+
+from FreeCAD import addImportType
+
+
+addImportType(
+    'YAML script (*.yml)' , 
+    'Import_Yml'
+)

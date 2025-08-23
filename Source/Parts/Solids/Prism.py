@@ -1,10 +1,10 @@
 
-def insertPrism ( document , attributes ):
+def insertPrism ( document , data ):
 
     solid = document.addObject('Part::Prism','Prism')
     
-    solid.Circumradius = f'{ attributes[ "radius" ] } mm'
-    solid.Polygon = int(attributes[ "polygon" ])
-    solid.Height = f'{ attributes[ "height" ] } mm'
+    solid.Circumradius = f'{ data[ "radius" ] } mm'
+    solid.Polygon = int(data[ "polygon" ])
+    solid.Height = f'{ data[ "height" ] } mm'
 
     return solid

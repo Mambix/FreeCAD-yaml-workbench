@@ -4,22 +4,22 @@ from os.path import join
 from Mesh import Mesh
 
 
-def insertMesh ( directory , filename , document , group , attributes : dict | None = None ):
+def insertMesh ( folder , file , document , group , data : dict | None = None ):
 
-    path = join(directory,filename)
+    path = join(folder,file)
 
     mesh = Mesh(path)
 
-    name = filename[:-4]
+    name = file[:-4]
 
-    if attributes:
-        if 'objectName' in attributes:
-            name = attributes[ 'objectName' ]
+    if data:
+        if 'objectName' in data:
+            name = data[ 'objectName' ]
     
-    new_mesh = document.addObject('Mesh::Feature',name)
-    new_mesh.Mesh = mesh
+    object = document.addObject('Mesh::Feature',name)
+    object.Mesh = mesh
     
-    if attributes:
-        defineCommon(new_mesh,attributes)
+    if data:
+        defineCommon(object,data)
 
-    group.addObject(new_mesh)
+    group.addObject(object)

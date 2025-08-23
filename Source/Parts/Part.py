@@ -4,33 +4,32 @@ from os.path import expanduser , isfile , join
 from Part import Shape , read
 
 
-def insertPart ( directory , filename , document , group , attributes : dict | None = None ):
+def insertPart ( folder , file , document , group , data : dict | None = None ):
 
-    path = join(directory,filename)
+    path = join(folder,file)
 
     if not isfile(path):
+        folder = expanduser('~/.FreeCAD/Mod/yaml-workspace')
 
-        directory = expanduser('~/.FreeCAD/Mod/yaml-workspace')
+    path = join(folder,file)
 
-        path = join(directory,filename)
-
-        if not isfile(path):
-            print(f'ERROR: `{ filename }` not found!')
-            return
+    if not isfile(path):
+        print(f'''ERROR: '{ file }' not found!''')
+        return
 
     shape = Shape()
     shape = read(path)
 
-    name = filename[:-4]
+    name = file[:-4]
     
-    if attributes:
-        if 'objectName' in attributes:
-            name = attributes[ 'objectName' ]
+    if data:
+        if 'objectName' in data:
+            name = data[ 'objectName' ]
     
-    part = document.addObject('Part::Feature',name)
-    part.Shape = shape
+    object = document.addObject('Part::Feature',name)
+    object.Shape = shape
 
-    if attributes:
-        defineCommon(part,attributes)
+    if data:
+        defineCommon(object,data)
 
-    group.addObject(part)
+    group.addObject(object)

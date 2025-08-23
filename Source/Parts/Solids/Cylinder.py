@@ -1,12 +1,12 @@
 
-def insertCylinder ( document , attributes ):
+def insertCylinder ( document , data ):
 
     solid = document.addObject('Part::Cylinder','Cylinder')
     
-    solid.Radius = f'{ attributes[ "radius" ] } mm'
-    solid.Height = f'{ attributes[ "height" ] } mm'
+    solid.Radius = f'{ data[ "radius" ] } mm'
+    solid.Height = f'{ data[ "height" ] } mm'
     
-    if 'angle' in attributes:
-        solid.Angle = f'{ attributes[ "angle" ] } deg'
+    if 'angle' in data:
+        solid.Angle = f'{ data[ "angle" ] } deg'
     
     return solid
