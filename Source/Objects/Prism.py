@@ -2,7 +2,7 @@
 from Source.Objects.Base import defineBasics
 
 
-def insertPrism ( name , document , group , attributes ):
+def insertPrism ( name , document , attributes ):
 
     solid = document.addObject('Part::Prism','Prism')
     
@@ -14,4 +14,4 @@ def insertPrism ( name , document , group , attributes ):
     
     defineBasics(solid,attributes)
 
-    group.addObject(solid)
+    return solid

@@ -2,7 +2,7 @@
 from Source.Objects.Base import defineBasics
 
 
-def insertCone ( name , document , group , attributes ):
+def insertCone ( name , document , attributes ):
 
     solid = document.addObject('Part::Cone','Cone')
     
@@ -17,4 +17,4 @@ def insertCone ( name , document , group , attributes ):
     
     defineBasics(solid,attributes)
 
-    group.addObject(solid)
+    return solid

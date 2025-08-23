@@ -2,7 +2,7 @@
 from Source.Objects.Base import defineBasics
 
 
-def insertWedge ( name , document , group , attributes ):
+def insertWedge ( name , document , attributes ):
 
     solid = document.addObject('Part::Wedge','Wedge')
 
@@ -20,4 +20,4 @@ def insertWedge ( name , document , group , attributes ):
 
     defineBasics(solid,attributes)
 
-    group.addObject(solid)
+    return solid

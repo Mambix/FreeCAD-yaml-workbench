@@ -2,7 +2,7 @@
 from Source.Objects.Base import defineBasics
 
 
-def insertCylinder ( name , document , group , attributes ):
+def insertCylinder ( name , document , attributes ):
 
     solid = document.addObject('Part::Cylinder','Cylinder')
     
@@ -16,4 +16,4 @@ def insertCylinder ( name , document , group , attributes ):
     
     defineBasics(solid,attributes)
 
-    group.addObject(solid)
+    return solid

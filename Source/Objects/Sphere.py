@@ -2,7 +2,7 @@
 from Source.Objects.Base import defineBasics
 
 
-def insertSphere ( name , document , group , attributes ):
+def insertSphere ( name , document , attributes ):
 
     solid = document.addObject('Part::Sphere','Sphere')
     
@@ -21,4 +21,4 @@ def insertSphere ( name , document , group , attributes ):
     
     defineBasics(solid,attributes)
 
-    group.addObject(solid)
+    return solid

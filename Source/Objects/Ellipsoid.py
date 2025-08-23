@@ -2,7 +2,7 @@
 from Source.Objects.Base import defineBasics
 
 
-def insertEllipsoid ( name , document , group , attributes ):
+def insertEllipsoid ( name , document , attributes ):
 
     solid = document.addObject('Part::Ellipsoid','Ellipsoid')
     
@@ -23,4 +23,4 @@ def insertEllipsoid ( name , document , group , attributes ):
     
     defineBasics(solid,attributes)
     
-    group.addObject(solid)
+    return solid

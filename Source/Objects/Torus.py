@@ -2,7 +2,7 @@
 from Source.Objects.Base import defineBasics
 
 
-def insertTorus ( name , document , group , attributes ):
+def insertTorus ( name , document , attributes ):
 
     solid = document.addObject('Part::Torus','Torus')
     
@@ -22,4 +22,4 @@ def insertTorus ( name , document , group , attributes ):
 
     defineBasics(solid,attributes)
     
-    group.addObject(solid)
+    return solid

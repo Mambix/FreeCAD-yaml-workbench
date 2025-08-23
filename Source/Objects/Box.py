@@ -2,7 +2,7 @@
 from Source.Objects.Base import defineBasics
 
 
-def insertBox ( name , document , group , attributes ):
+def insertBox ( name , document , attributes ):
 
     solid = document.addObject('Part::Box','Box')
 
@@ -14,4 +14,4 @@ def insertBox ( name , document , group , attributes ):
     
     defineBasics(solid,attributes)
     
-    group.addObject(solid)
+    return solid

@@ -1,8 +1,8 @@
 
 from Source.Objects import *
 from builtins import open as openFile
-from yaml import safe_load
 from FreeCAD import newDocument , GuiUp
+from yaml import safe_load
 from os import path
 
 
@@ -37,10 +37,13 @@ def insertSolid ( name , document , group , attributes ):
     
     type = attributes[ "solid" ]
 
-    if type in Shapes:
-        return Shapes[ type ](name,document,group,attributes)
+    if not type in Shapes:
+        print(f'ERROR: Unsupported solid type { type }')
+        return
+    
+    shape = Shapes[ type ](name,document,attributes)
 
-    print(f'ERROR: Unsupported solid type { type }')
+    group.addObject(shape)
 
 
 def open(filename):
