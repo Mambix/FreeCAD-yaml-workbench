@@ -86,24 +86,29 @@ def insertPart(directory, filename, document, group, attributes = None):
         new_part.Placement = App.Placement(placement, rotation)
     group.addObject(new_part)
 
-def insertSolid(name, document, group, attributes):
-    if attributes['solid'] == 'cylinder':
-        return insertCylinder(name, document, group, attributes)
-    if attributes['solid'] == 'sphere':
-        return insertSphere(name, document, group, attributes)
-    if attributes['solid'] == 'ellipsoid':
-        return insertEllipsoid(name, document, group, attributes)
-    if attributes['solid'] == 'box':
-        return insertBox(name, document, group, attributes)
-    if attributes['solid'] == 'cone':
-        return insertCone(name, document, group, attributes)
-    if attributes['solid'] == 'torus':
-        return insertTorus(name, document, group, attributes)
-    if attributes['solid'] == 'prism':
-        return insertPrism(name, document, group, attributes)
-    if attributes['solid'] == 'wedge':
-        return insertWedge(name, document, group, attributes)
-    print('ERROR: Unsupported solid tyle {}'.format(attributes['solid']))
+def insertSolid ( name , document , group , attributes ):
+    
+    type = attributes[ 'solid' ]
+
+    match type :
+        case 'ellipsoid' :
+            return insertEllipsoid(name,document,group,attributes)
+        case 'cylinder' :
+            return insertCylinder(name,document,group,attributes)
+        case 'sphere' :
+            return insertSphere(name,document,group,attributes)
+        case 'wedge' :
+            return insertWedge(name,document,group,attributes)
+        case 'torus' :
+            return insertTorus(name,document,group,attributes)
+        case 'prism' :
+            return insertPrism(name,document,group,attributes)
+        case 'cone' :
+            return insertCone(name,document,group,attributes)
+        case 'box' :
+            return insertBox(name,document,group,attributes)
+
+    print(f'ERROR: Unsupported solid type { type }')
 
 def insertCylinder(name, document, group, attributes):
     solid = document.addObject("Part::Cylinder","Cylinder")
