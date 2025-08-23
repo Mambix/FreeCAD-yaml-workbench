@@ -1,6 +1,5 @@
 
-from Source.Accessors import *
-from FreeCAD import Placement
+from Source.Objects.Base import defineBasics
 
 
 def insertBox(name, document, group, attributes):
@@ -9,13 +8,7 @@ def insertBox(name, document, group, attributes):
     solid.Length = f'{ attributes[ "length" ] } mm'
     solid.Height = f'{ attributes[ "height" ] } mm'
     solid.Width = f'{ attributes[ "width" ] } mm'
-    color = getColor(attributes)
-    if color:
-        solid.ViewObject.ShapeColor = color
-    transparency = getTransparency(attributes)
-    if transparency:
-        solid.ViewObject.Transparency = transparency
-    placement = getPlacement(attributes)
-    rotation = getRotation(attributes)
-    solid.Placement = Placement(placement, rotation)
+    
+    defineBasics(solid,attributes)
+    
     group.addObject(solid)

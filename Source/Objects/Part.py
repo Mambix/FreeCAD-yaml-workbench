@@ -1,6 +1,5 @@
 
-from Source.Accessors import *
-from FreeCAD import Placement
+from Source.Objects.Base import defineBasics
 from Part import Shape , read
 from os import path
 
@@ -22,14 +21,8 @@ def insertPart(directory, filename, document, group, attributes : dict | None = 
     
     new_part = document.addObject("Part::Feature", object_name)
     new_part.Shape = part
+
     if attributes:
-        color = getColor(attributes)
-        if color:
-            new_part.ViewObject.ShapeColor = color
-        transparency = getTransparency(attributes)
-        if transparency:
-            new_part.ViewObject.Transparency = transparency
-        placement = getPlacement(attributes)
-        rotation = getRotation(attributes)
-        new_part.Placement = Placement(placement, rotation)
+        defineBasics(new_part,attributes)
+
     group.addObject(new_part)

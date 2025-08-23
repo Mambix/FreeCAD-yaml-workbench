@@ -1,10 +1,11 @@
 
-from Source.Accessors import *
-from FreeCAD import Placement
+from Source.Objects.Base import defineBasics
 
 
-def insertTorus(name, document, group, attributes):
+def insertTorus( name , document , group , attributes ):
+
     solid = document.addObject("Part::Torus","Torus")
+    
     solid.Label = name
     solid.Radius1 = f'{ attributes[ "radius1" ] } mm'
     solid.Radius2 = f'{ attributes[ "radius2" ] } mm'
@@ -14,13 +15,7 @@ def insertTorus(name, document, group, attributes):
         solid.Angle2 = f'{ attributes[ "angle2" ] } deg'
     if 'angle3' in attributes:
         solid.Angle3 = f'{ attributes[ "angle3" ] } deg'
-    color = getColor(attributes)
-    if color:
-        solid.ViewObject.ShapeColor = color
-    transparency = getTransparency(attributes)
-    if transparency:
-        solid.ViewObject.Transparency = transparency
-    placement = getPlacement(attributes)
-    rotation = getRotation(attributes)
-    solid.Placement = Placement(placement, rotation)
+
+    defineBasics(solid,attributes)
+    
     group.addObject(solid)

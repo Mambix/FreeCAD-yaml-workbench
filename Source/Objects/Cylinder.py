@@ -1,6 +1,5 @@
 
-from Source.Accessors import *
-from FreeCAD import Placement
+from Source.Objects.Base import defineBasics
 
 
 def insertCylinder(name, document, group, attributes):
@@ -10,13 +9,7 @@ def insertCylinder(name, document, group, attributes):
     solid.Height = f'{ attributes[ "height" ] } mm'
     if 'angle' in attributes:
         solid.Angle = f'{ attributes[ "angle" ] } deg'
-    color = getColor(attributes)
-    if color:
-        solid.ViewObject.ShapeColor = color
-    transparency = getTransparency(attributes)
-    if transparency:
-        solid.ViewObject.Transparency = transparency
-    placement = getPlacement(attributes)
-    rotation = getRotation(attributes)
-    solid.Placement = Placement(placement, rotation)
+    
+    defineBasics(solid,attributes)
+
     group.addObject(solid)

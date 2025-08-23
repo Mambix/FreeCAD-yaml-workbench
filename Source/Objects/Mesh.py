@@ -1,6 +1,5 @@
 
-from Source.Accessors import *
-from FreeCAD import Placement
+from Source.Objects.Base import defineBasics
 from Mesh import Mesh
 from os import path
 
@@ -15,14 +14,8 @@ def insertMesh(directory, filename, document, group, attributes : dict | None = 
     
     new_mesh = document.addObject("Mesh::Feature", object_name)
     new_mesh.Mesh = mesh
+    
     if attributes:
-        color = getColor(attributes)
-        if color:
-            new_mesh.ViewObject.ShapeColor = color
-        transparency = getTransparency(attributes)
-        if transparency:
-            new_mesh.ViewObject.Transparency = transparency
-        placement = getPlacement(attributes)
-        rotation = getRotation(attributes)
-        new_mesh.Placement = Placement(placement, rotation)
+        defineBasics(new_mesh,attributes)
+
     group.addObject(new_mesh)
