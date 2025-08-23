@@ -1,18 +1,21 @@
-import os
-import sys
-import FreeCAD as App, Mesh, Part
+
+import FreeCAD as App , Mesh , Part
+
+from builtins import open as openFile
 from yaml import safe_load
+from sys import version_info as version , exit
+from os import path
+
 
 if App.GuiUp:
     import FreeCADGui as Gui
 
-
-if not sys.version_info.major == 3:
+if not version.major == 3:
     print('This script requires Python 3.x')
-    print(f'You are using Python { sys.version_info.major }.{ sys.version_info.minor }')
-    sys.exit(1)
+    print(f'You are using Python { version.major }.{ version.minor }')
+    exit(1)
 
-pythonopen = open
+
 predefined_colors = {
     'red': (1.0, 0.0, 0.0),
     'darkRed': (0.67, 0.0, 0.0),
@@ -32,9 +35,9 @@ predefined_colors = {
 
 
 def insertObject(directory, filename, document, group, attributes = None):
-    if not os.path.isfile(os.path.join(directory, filename)):
-        directory = os.path.expanduser('~/.FreeCAD/Mod/yaml-workspace')
-        if not os.path.isfile(os.path.join(directory, filename)):
+    if not path.isfile(path.join(directory, filename)):
+        directory = path.expanduser('~/.FreeCAD/Mod/yaml-workspace')
+        if not path.isfile(path.join(directory, filename)):
             print(f'ERROR: `{ filename }` not found!')
             return
     if filename[-4:] in ['.stp', '.igs', 'iges', 'step']:
@@ -61,9 +64,9 @@ def insertMesh(directory, filename, document, group, attributes = None):
     group.addObject(new_mesh)
 
 def insertPart(directory, filename, document, group, attributes = None):
-    if not os.path.isfile(os.path.join(directory, filename)):
-        directory = os.path.expanduser('~/.FreeCAD/Mod/yaml-workspace')
-        if not os.path.isfile(os.path.join(directory, filename)):
+    if not path.isfile(path.join(directory, filename)):
+        directory = path.expanduser('~/.FreeCAD/Mod/yaml-workspace')
+        if not path.isfile(path.join(directory, filename)):
             print('ERROR: `{}` not found!'.format(filename))
             return
 
@@ -297,13 +300,13 @@ def getRotation(json_data):
     return App.Rotation(App.Vector(*rotation_vector), rotation_angle)
 
 def open(filename):
-    base_directory = os.path.dirname(filename)
+    base_directory = path.dirname(filename)
     sub_directory = None
     print(f'Reading: { filename }')
     print(f'Base: { base_directory }')
 
     yaml_data = None
-    with pythonopen(filename) as f:
+    with openFile(filename) as f:
         yaml_data = safe_load(f)
 
     if yaml_data is None:
