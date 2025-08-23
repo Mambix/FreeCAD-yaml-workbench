@@ -1,12 +1,7 @@
 
-from Source.Objects.Base import defineBasics
-
-
-def insertCylinder ( name , document , attributes ):
+def insertCylinder ( document , attributes ):
 
     solid = document.addObject('Part::Cylinder','Cylinder')
-    
-    solid.Label = name
     
     solid.Radius = f'{ attributes[ "radius" ] } mm'
     solid.Height = f'{ attributes[ "height" ] } mm'
@@ -14,6 +9,4 @@ def insertCylinder ( name , document , attributes ):
     if 'angle' in attributes:
         solid.Angle = f'{ attributes[ "angle" ] } deg'
     
-    defineBasics(solid,attributes)
-
     return solid

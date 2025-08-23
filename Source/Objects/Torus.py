@@ -2,12 +2,10 @@
 from Source.Objects.Base import defineBasics
 
 
-def insertTorus ( name , document , attributes ):
+def insertTorus ( document , attributes ):
 
     solid = document.addObject('Part::Torus','Torus')
     
-    solid.Label = name
- 
     solid.Radius1 = f'{ attributes[ "radius1" ] } mm'
     solid.Radius2 = f'{ attributes[ "radius2" ] } mm'
  
@@ -20,6 +18,4 @@ def insertTorus ( name , document , attributes ):
     if 'angle3' in attributes:
         solid.Angle3 = f'{ attributes[ "angle3" ] } deg'
 
-    defineBasics(solid,attributes)
-    
     return solid

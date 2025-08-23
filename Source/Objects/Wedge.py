@@ -2,11 +2,9 @@
 from Source.Objects.Base import defineBasics
 
 
-def insertWedge ( name , document , attributes ):
+def insertWedge ( document , attributes ):
 
     solid = document.addObject('Part::Wedge','Wedge')
-
-    solid.Label = name
 
     keys = [ 
         'Xmin' , 'Ymin' , 'Zmin' ,
@@ -17,7 +15,5 @@ def insertWedge ( name , document , attributes ):
 
     for key in keys:
         setattr(solid,key, f'{ attributes[ key.lower() ] } mm' )
-
-    defineBasics(solid,attributes)
 
     return solid

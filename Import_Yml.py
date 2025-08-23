@@ -1,4 +1,5 @@
 
+from Source.Objects.Base import defineBasics
 from Source.Objects import *
 from builtins import open as openFile
 from FreeCAD import newDocument , GuiUp
@@ -41,7 +42,10 @@ def insertSolid ( name , document , group , attributes ):
         print(f'ERROR: Unsupported solid type { type }')
         return
     
-    shape = Shapes[ type ](name,document,attributes)
+    shape = Shapes[ type ](document,attributes)
+    shape.Label = name
+
+    defineBasics(shape,attributes)
 
     group.addObject(shape)
 
