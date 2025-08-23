@@ -274,15 +274,21 @@ def insertWedge(name, document, group, attributes):
     solid.Placement = App.Placement(placement, rotation)
     group.addObject(solid)
 
-def getColor(json_data):
-    color_data = json_data.get('color', None)
-    if not color_data:
+def getColor ( data ):
+
+    color = data.get('color', None)
+    
+    if not color:
         return None
-    if not isinstance(color_data, list):
-        if color_data not in predefined_colors:
-            raise Exception('Color data needs to be an array of RGB floats or one of predefined colors!!!')
-        return predefined_colors[color_data]
-    return (color_data[0], color_data[1], color_data[2])
+    
+    if isinstance(color,list):
+        return ( color[0] , color[1] , color[2] )
+
+    if color in predefined_colors:
+        return predefined_colors[ color ]
+    
+    raise Exception('Color data needs to be an array of RGB floats or one of predefined colors!')
+    
 
 def getTransparency(json_data):
     return json_data.get('transparency', None)
