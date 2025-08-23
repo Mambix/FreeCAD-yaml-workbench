@@ -302,10 +302,16 @@ def getPlacement ( data ):
         
     return App.Vector(0.0,0.0,0.0)
 
-def getRotation(json_data):
-    rotation_vector = json_data.get('rotationVector', (.0, .0, 1.0))
-    rotation_angle = json_data.get('rotationAngle', 0.0)
-    return App.Rotation(App.Vector(*rotation_vector), rotation_angle)
+
+def getRotation ( data ):
+
+    points = data.get('rotationVector',(0.0,0.0,1.0))
+    angle = data.get('rotationAngle',0.0)
+
+    vector = App.Vector(*points)
+
+    return App.Rotation(vector,angle)
+
 
 def open(filename):
     base_directory = path.dirname(filename)
