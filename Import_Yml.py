@@ -1,6 +1,5 @@
 
-from Source.Objects.Base import defineBasics
-from Source.Objects import *
+from Source.Parts import *
 from builtins import open as openFile
 from FreeCAD import newDocument , GuiUp
 from yaml import safe_load
@@ -9,45 +8,6 @@ from os import path
 
 if GuiUp:
     import FreeCADGui as Gui # type: ignore
-
-def insertObject(directory, filename, document, group, attributes = None):
-    if not path.isfile(path.join(directory, filename)):
-        directory = path.expanduser('~/.FreeCAD/Mod/yaml-workspace')
-        if not path.isfile(path.join(directory, filename)):
-            print(f'ERROR: `{ filename }` not found!')
-            return
-    if filename[-4:] in ['.stp', '.igs', 'iges', 'step']:
-        return insertPart(directory, filename, document, group, attributes)
-    insertMesh(directory, filename, document, group, attributes)
-
-
-
-Shapes = {
-    'ellipsoid' : insertEllipsoid ,
-    'cylinder' : insertCylinder ,
-    'sphere' : insertSphere ,
-    'wedge' : insertWedge ,
-    'torus' : insertTorus ,
-    'prism' : insertPrism ,
-    'cone' : insertCone ,
-    'box' : insertBox
-}
-
-
-def insertSolid ( name , document , group , attributes ):
-    
-    type = attributes[ "solid" ]
-
-    if not type in Shapes:
-        print(f'ERROR: Unsupported solid type { type }')
-        return
-    
-    shape = Shapes[ type ](document,attributes)
-    shape.Label = name
-
-    defineBasics(shape,attributes)
-
-    group.addObject(shape)
 
 
 def open(filename):

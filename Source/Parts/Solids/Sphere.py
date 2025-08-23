@@ -1,7 +1,4 @@
 
-from Source.Objects.Base import defineBasics
-
-
 def insertSphere ( document , attributes ):
 
     solid = document.addObject('Part::Sphere','Sphere')

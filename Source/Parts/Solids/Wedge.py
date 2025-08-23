@@ -1,7 +1,4 @@
 
-from Source.Objects.Base import defineBasics
-
-
 def insertWedge ( document , attributes ):
 
     solid = document.addObject('Part::Wedge','Wedge')

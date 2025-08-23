@@ -1,7 +1,4 @@
 
-from Source.Objects.Base import defineBasics
-
-
 def insertTorus ( document , attributes ):
 
     solid = document.addObject('Part::Torus','Torus')

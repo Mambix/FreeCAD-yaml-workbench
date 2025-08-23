@@ -1,5 +1,4 @@
 
-
 def insertPrism ( document , attributes ):
 
     solid = document.addObject('Part::Prism','Prism')

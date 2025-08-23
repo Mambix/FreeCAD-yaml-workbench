@@ -1,9 +1,9 @@
 
-from Source.Accessors import *
+from Source.Getters import *
 from FreeCAD import Placement
 
 
-def defineBasics ( object , attributes ):
+def defineCommon ( object , attributes ):
 
     transparency = getTransparency(attributes)
     placement = getPlacement(attributes)

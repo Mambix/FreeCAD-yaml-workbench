@@ -1,5 +1,5 @@
 
-from Source.Objects.Base import defineBasics
+from Source.Parts.Common import defineCommon
 from os.path import join
 from Mesh import Mesh
 
@@ -20,6 +20,6 @@ def insertMesh ( directory , filename , document , group , attributes : dict | N
     new_mesh.Mesh = mesh
     
     if attributes:
-        defineBasics(new_mesh,attributes)
+        defineCommon(new_mesh,attributes)
 
     group.addObject(new_mesh)

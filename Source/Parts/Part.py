@@ -1,5 +1,5 @@
 
-from Source.Objects.Base import defineBasics
+from Source.Parts.Common import defineCommon
 from os.path import expanduser , isfile , join
 from Part import Shape , read
 
@@ -31,6 +31,6 @@ def insertPart ( directory , filename , document , group , attributes : dict | N
     part.Shape = shape
 
     if attributes:
-        defineBasics(part,attributes)
+        defineCommon(part,attributes)
 
     group.addObject(part)
