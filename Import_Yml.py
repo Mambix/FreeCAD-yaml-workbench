@@ -2,6 +2,7 @@
 import FreeCAD as App , Mesh , Part
 
 from builtins import open as openFile
+from Colors import Colors
 from yaml import safe_load
 from sys import version_info as version , exit
 from os import path
@@ -14,24 +15,6 @@ if not version.major == 3:
     print('This script requires Python 3.x')
     print(f'You are using Python { version.major }.{ version.minor }')
     exit(1)
-
-
-predefined_colors = {
-    'red': (1.0, 0.0, 0.0),
-    'darkRed': (0.67, 0.0, 0.0),
-    'green': (0.0, 1.0, 0.0),
-    'darkGreen': (0.0, 0.67, 0.0),
-    'blue': (0.0, 0.0, 1.0),
-    'darkBlue': (0.0, 0.0, 0.67),
-    'yellow': (1.0, 1.0, 0.0),
-    'cyan': (0.0, 1.0, 1.0),
-    'purple': (1.0, 0.0, 1.0),
-    'white': (1.0, 1.0, 1.0),
-    'lightGray': (0.75, 0.75, 0.75),
-    'gray': (0.5, 0.5, 0.5),
-    'darkGray': (0.25, 0.25, 0.25),
-    'black': (0.0, 0.0, 0.0),
-}
 
 
 def insertObject(directory, filename, document, group, attributes = None):
@@ -284,8 +267,8 @@ def getColor ( data ):
     if isinstance(color,list):
         return ( color[0] , color[1] , color[2] )
 
-    if color in predefined_colors:
-        return predefined_colors[ color ]
+    if color in Colors:
+        return Colors[ color ]
     
     raise Exception('Color data needs to be an array of RGB floats or one of predefined colors!')
     
