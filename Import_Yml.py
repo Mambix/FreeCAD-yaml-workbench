@@ -293,12 +293,14 @@ def getColor ( data ):
 def getTransparency(json_data):
     return json_data.get('transparency', None)
 
-def getPlacement(json_data):
-    placement = App.Vector(.0, .0, .0)
-    placement_config = json_data.get('placement', None)
-    if placement_config:
-        placement = App.Vector(*placement_config)
-    return placement
+def getPlacement ( data ):
+    
+    config = data.get('placement',None)
+    
+    if config:
+        return App.Vector(*config)
+        
+    return App.Vector(0.0,0.0,0.0)
 
 def getRotation(json_data):
     rotation_vector = json_data.get('rotationVector', (.0, .0, 1.0))
