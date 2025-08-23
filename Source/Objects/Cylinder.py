@@ -1,7 +1,6 @@
 
-import FreeCAD as App
-
 from Source.Accessors import *
+from FreeCAD import Placement
 
 
 def insertCylinder(name, document, group, attributes):
@@ -19,5 +18,5 @@ def insertCylinder(name, document, group, attributes):
         solid.ViewObject.Transparency = transparency
     placement = getPlacement(attributes)
     rotation = getRotation(attributes)
-    solid.Placement = App.Placement(placement, rotation)
+    solid.Placement = Placement(placement, rotation)
     group.addObject(solid)

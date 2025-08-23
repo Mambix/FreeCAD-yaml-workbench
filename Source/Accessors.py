@@ -11,7 +11,7 @@ def getTransparency ( data : dict ) -> None | float :
     return data.get('transparency',None)
 
 
-def getPlacement ( data : dict ) -> object :
+def getPlacement ( data : dict ):
     
     config = data.get('placement',None)
     
@@ -21,7 +21,7 @@ def getPlacement ( data : dict ) -> object :
     return Vector(0.0,0.0,0.0)
 
 
-def getRotation ( data : dict ) -> object :
+def getRotation ( data : dict ):
 
     points = data.get('rotationVector',(0.0,0.0,1.0))
     angle = data.get('rotationAngle',0.0)

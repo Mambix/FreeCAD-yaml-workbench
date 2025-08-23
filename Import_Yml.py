@@ -1,14 +1,13 @@
 
-import FreeCAD as App , Mesh , Part
-
 from Source.Objects import *
 from builtins import open as openFile
 from yaml import safe_load
+from FreeCAD import newDocument , GuiUp
 from os import path
 
 
-if App.GuiUp:
-    import FreeCADGui as Gui
+if GuiUp:
+    import FreeCADGui as Gui # type: ignore
 
 def insertObject(directory, filename, document, group, attributes = None):
     if not path.isfile(path.join(directory, filename)):
@@ -72,7 +71,7 @@ def open(filename):
     yaml_data = yaml_data['import']
 
     for document_name, document_data in yaml_data.items():
-        document = App.newDocument(document_name)
+        document = newDocument(document_name)
 
         for group_name, group_data in document_data.items():
             document_group = document.addObject("App::DocumentObjectGroup", group_name)
@@ -100,5 +99,6 @@ def open(filename):
                     for file_data2 in file_data:
                         insertObject(base_directory, file, document, document_group, file_data2)
         document.recompute()
-    Gui.activeDocument().activeView().viewAxonometric()
-    Gui.SendMsgToActiveView("ViewFit")
+
+    Gui.activeDocument().activeView().viewAxonometric() # type: ignore
+    Gui.SendMsgToActiveView("ViewFit") # type: ignore
