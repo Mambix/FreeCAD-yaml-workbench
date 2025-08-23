@@ -67,7 +67,7 @@ def insertPart(directory, filename, document, group, attributes = None):
     if not path.isfile(path.join(directory, filename)):
         directory = path.expanduser('~/.FreeCAD/Mod/yaml-workspace')
         if not path.isfile(path.join(directory, filename)):
-            print('ERROR: `{}` not found!'.format(filename))
+            print(f'ERROR: `{ filename }` not found!')
             return
 
     part = Part.Shape()
@@ -301,7 +301,6 @@ def getRotation(json_data):
 
 def open(filename):
     base_directory = path.dirname(filename)
-    sub_directory = None
     print(f'Reading: { filename }')
     print(f'Base: { base_directory }')
 
@@ -312,14 +311,14 @@ def open(filename):
     if yaml_data is None:
         raise Exception(f'Error reading YAML file: { filename }')
 
-    print('YML data: {}'.format(yaml_data))
+    print(f'YML data: { yaml_data }')
     if 'settings' in yaml_data:
         if 'subDirectory' in yaml_data[ "settings" ]:
             
             folder = yaml_data[ 'settings' ][ 'subDirectory' ]
 
             base_directory = path.join(base_directory,folder)
-            
+
             print(f'Base: { base_directory }')
 
     if 'import' not in yaml_data:
