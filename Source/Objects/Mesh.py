@@ -1,18 +1,22 @@
 
 from Source.Objects.Base import defineBasics
+from os.path import join
 from Mesh import Mesh
-from os import path
 
 
-def insertMesh(directory, filename, document, group, attributes : dict | None = None):
-    mesh = Mesh(path.join(directory,filename))
-    object_name = filename[:-4]
+def insertMesh ( directory , filename , document , group , attributes : dict | None = None ):
+
+    path = join(directory,filename)
+
+    mesh = Mesh(path)
+
+    name = filename[:-4]
 
     if attributes:
         if 'objectName' in attributes:
-            object_name = attributes['objectName']
+            name = attributes[ 'objectName' ]
     
-    new_mesh = document.addObject("Mesh::Feature", object_name)
+    new_mesh = document.addObject('Mesh::Feature',name)
     new_mesh.Mesh = mesh
     
     if attributes:
