@@ -8,8 +8,8 @@ if App.GuiUp:
 
 
 if not sys.version_info.major == 3:
-    print("This script requires Python 3.x")
-    print("You are using Python {}.{}.".format(sys.version_info.major, sys.version_info.minor))
+    print('This script requires Python 3.x')
+    print(f'You are using Python { sys.version_info.major }.{ sys.version_info.minor }')
     sys.exit(1)
 
 pythonopen = open
@@ -35,14 +35,14 @@ def insertObject(directory, filename, document, group, attributes = None):
     if not os.path.isfile(os.path.join(directory, filename)):
         directory = os.path.expanduser('~/.FreeCAD/Mod/yaml-workspace')
         if not os.path.isfile(os.path.join(directory, filename)):
-            print('ERROR: `{}` not found!'.format(filename))
+            print(f'ERROR: `{ filename }` not found!')
             return
     if filename[-4:] in ['.stp', '.igs', 'iges', 'step']:
         return insertPart(directory, filename, document, group, attributes)
     insertMesh(directory, filename, document, group, attributes)
 
 def insertMesh(directory, filename, document, group, attributes = None):
-    mesh = Mesh.Mesh(u'{}/{}'.format(directory, filename))
+    mesh = Mesh.Mesh(f'{ directory }/{ filename }')
     object_name = filename[:-4]
     if 'objectName' in attributes:
         object_name = attributes['objectName']
@@ -68,7 +68,7 @@ def insertPart(directory, filename, document, group, attributes = None):
             return
 
     part = Part.Shape()
-    part = Part.read(u'{}/{}'.format(directory, filename))
+    part = Part.read(f'{ directory }/{ filename }')
     object_name = filename[:-4]
     if 'objectName' in attributes:
         object_name = attributes['objectName']
@@ -88,7 +88,7 @@ def insertPart(directory, filename, document, group, attributes = None):
 
 def insertSolid ( name , document , group , attributes ):
     
-    type = attributes[ 'solid' ]
+    type = attributes[ "solid" ]
 
     match type :
         case 'ellipsoid' :
@@ -113,10 +113,10 @@ def insertSolid ( name , document , group , attributes ):
 def insertCylinder(name, document, group, attributes):
     solid = document.addObject("Part::Cylinder","Cylinder")
     solid.Label = name
-    solid.Radius = '{} mm'.format(attributes['radius'])
-    solid.Height = '{} mm'.format(attributes['height'])
+    solid.Radius = f'{ attributes[ "radius" ] } mm'
+    solid.Height = f'{ attributes[ "height" ] } mm'
     if 'angle' in attributes:
-        solid.Angle = '{} deg'.format(attributes['angle'])
+        solid.Angle = f'{ attributes[ "angle" ] } deg'
     color = getColor(attributes)
     if color:
         solid.ViewObject.ShapeColor = color
@@ -131,13 +131,13 @@ def insertCylinder(name, document, group, attributes):
 def insertSphere(name, document, group, attributes):
     solid = document.addObject("Part::Sphere","Sphere")
     solid.Label = name
-    solid.Radius = '{} mm'.format(attributes['radius'])
+    solid.Radius = f'{ attributes[ "radius" ] } mm'
     if 'angle1' in attributes:
-        solid.Angle1 = '{} deg'.format(attributes['angle1'])
+        solid.Angle1 = f'{ attributes[ "angle1" ] } deg'
     if 'angle2' in attributes:
-        solid.Angle2 = '{} deg'.format(attributes['angle2'])
+        solid.Angle2 = f'{ attributes[ "angle2" ] } deg'
     if 'angle3' in attributes:
-        solid.Angle3 = '{} deg'.format(attributes['angle3'])
+        solid.Angle3 = f'{ attributes[ "angle3" ] } deg'
     color = getColor(attributes)
     if color:
         solid.ViewObject.ShapeColor = color
@@ -152,15 +152,15 @@ def insertSphere(name, document, group, attributes):
 def insertEllipsoid(name, document, group, attributes):
     solid = document.addObject("Part::Ellipsoid","Ellipsoid")
     solid.Label = name
-    solid.Radius1 = '{} mm'.format(attributes['radius1'])
-    solid.Radius2 = '{} mm'.format(attributes['radius2'])
-    solid.Radius3 = '{} mm'.format(attributes['radius3'])
+    solid.Radius1 = f'{ attributes[ "radius1" ] } mm'
+    solid.Radius2 = f'{ attributes[ "radius2" ] } mm'
+    solid.Radius3 = f'{ attributes[ "radius3" ] } mm'
     if 'angle1' in attributes:
-        solid.Angle1 = '{} deg'.format(attributes['angle1'])
+        solid.Angle1 = f'{ attributes[ "angle1" ] } deg'
     if 'angle2' in attributes:
-        solid.Angle2 = '{} deg'.format(attributes['angle2'])
+        solid.Angle2 = f'{ attributes[ "angle2" ] } deg'
     if 'angle3' in attributes:
-        solid.Angle3 = '{} deg'.format(attributes['angle3'])
+        solid.Angle3 = f'{ attributes[ "angle3" ] } deg'
     color = getColor(attributes)
     if color:
         solid.ViewObject.ShapeColor = color
@@ -175,9 +175,9 @@ def insertEllipsoid(name, document, group, attributes):
 def insertBox(name, document, group, attributes):
     solid = document.addObject("Part::Box","Box")
     solid.Label = name
-    solid.Length = '{} mm'.format(attributes['length'])
-    solid.Width = '{} mm'.format(attributes['width'])
-    solid.Height = '{} mm'.format(attributes['height'])
+    solid.Length = f'{ attributes[ "length" ] } mm'
+    solid.Height = f'{ attributes[ "height" ] } mm'
+    solid.Width = f'{ attributes[ "width" ] } mm'
     color = getColor(attributes)
     if color:
         solid.ViewObject.ShapeColor = color
@@ -192,11 +192,11 @@ def insertBox(name, document, group, attributes):
 def insertCone(name, document, group, attributes):
     solid = document.addObject("Part::Cone","Cone")
     solid.Label = name
-    solid.Radius1 = '{} mm'.format(attributes['radius1'])
-    solid.Radius2 = '{} mm'.format(attributes['radius2'])
-    solid.Height = '{} mm'.format(attributes['height'])
+    solid.Radius1 = f'{ attributes[ "radius1" ] } mm'
+    solid.Radius2 = f'{ attributes[ "radius2" ] } mm'
+    solid.Height = f'{ attributes[ "height" ] } mm'
     if 'angle' in attributes:
-        solid.Angle = '{} deg'.format(attributes['angle'])
+        solid.Angle = f'{ attributes[ "angle" ] } deg'
     color = getColor(attributes)
     if color:
         solid.ViewObject.ShapeColor = color
@@ -211,14 +211,14 @@ def insertCone(name, document, group, attributes):
 def insertTorus(name, document, group, attributes):
     solid = document.addObject("Part::Torus","Torus")
     solid.Label = name
-    solid.Radius1 = '{} mm'.format(attributes['radius1'])
-    solid.Radius2 = '{} mm'.format(attributes['radius2'])
+    solid.Radius1 = f'{ attributes[ "radius1" ] } mm'
+    solid.Radius2 = f'{ attributes[ "radius2" ] } mm'
     if 'angle1' in attributes:
-        solid.Angle1 = '{} deg'.format(attributes['angle1'])
+        solid.Angle1 = f'{ attributes[ "angle1" ] } deg'
     if 'angle2' in attributes:
-        solid.Angle2 = '{} deg'.format(attributes['angle2'])
+        solid.Angle2 = f'{ attributes[ "angle2" ] } deg'
     if 'angle3' in attributes:
-        solid.Angle3 = '{} deg'.format(attributes['angle3'])
+        solid.Angle3 = f'{ attributes[ "angle3" ] } deg'
     color = getColor(attributes)
     if color:
         solid.ViewObject.ShapeColor = color
@@ -233,9 +233,9 @@ def insertTorus(name, document, group, attributes):
 def insertPrism(name, document, group, attributes):
     solid = document.addObject("Part::Prism","Prism")
     solid.Label = name
-    solid.Polygon = int(attributes['polygon'])
-    solid.Circumradius = '{} mm'.format(attributes['radius'])
-    solid.Height = '{} mm'.format(attributes['height'])
+    solid.Polygon = int(attributes[ "polygon" ])
+    solid.Circumradius = f'{ attributes[ "radius" ] } mm'
+    solid.Height = f'{ attributes[ "height" ] } mm'
     color = getColor(attributes)
     if color:
         solid.ViewObject.ShapeColor = color
@@ -250,16 +250,16 @@ def insertPrism(name, document, group, attributes):
 def insertWedge(name, document, group, attributes):
     solid = document.addObject("Part::Wedge","Wedge")
     solid.Label = name
-    solid.Xmin = '{} mm'.format(attributes['xmin'])
-    solid.Ymin = '{} mm'.format(attributes['ymin'])
-    solid.Zmin = '{} mm'.format(attributes['zmin'])
-    solid.X2min = '{} mm'.format(attributes['x2min'])
-    solid.Z2min = '{} mm'.format(attributes['z2min'])
-    solid.Xmax = '{} mm'.format(attributes['xmax'])
-    solid.Ymax = '{} mm'.format(attributes['ymax'])
-    solid.Zmax = '{} mm'.format(attributes['zmax'])
-    solid.X2max = '{} mm'.format(attributes['x2max'])
-    solid.Z2max = '{} mm'.format(attributes['z2max'])
+    solid.Xmin = f'{ attributes[ "xmin" ] } mm'
+    solid.Ymin = f'{ attributes[ "ymin" ] } mm'
+    solid.Zmin = f'{ attributes[ "zmin" ] } mm'
+    solid.X2min = f'{ attributes[ "x2min" ] } mm'
+    solid.Z2min = f'{ attributes[ "z2min" ] } mm'
+    solid.Xmax = f'{ attributes[ "xmax" ] } mm'
+    solid.Ymax = f'{ attributes[ "ymax" ] } mm'
+    solid.Zmax = f'{ attributes[ "zmax" ] } mm'
+    solid.X2max = f'{ attributes[ "x2max" ] } mm'
+    solid.Z2max = f'{ attributes[ "z2max" ] } mm'
     color = getColor(attributes)
     if color:
         solid.ViewObject.ShapeColor = color
@@ -299,21 +299,21 @@ def getRotation(json_data):
 def open(filename):
     base_directory = os.path.dirname(filename)
     sub_directory = None
-    print('Reading: {}'.format(filename))
-    print('Base: {}'.format(base_directory))
+    print(f'Reading: { filename }')
+    print(f'Base: { base_directory }')
 
     yaml_data = None
     with pythonopen(filename) as f:
         yaml_data = safe_load(f)
 
     if yaml_data is None:
-        raise Exception("Error reading YAML file: {}".format(filename))
+        raise Exception(f'Error reading YAML file: { filename }')
 
     print('YML data: {}'.format(yaml_data))
     if 'settings' in yaml_data:
-        if 'subDirectory' in yaml_data['settings']:
-            base_directory += '/{}'.format(yaml_data['settings']['subDirectory'])
-            print('Base: {}'.format(base_directory))
+        if 'subDirectory' in yaml_data[ "settings" ]:
+            base_directory += f'/{ yaml_data[ "settings" ][ "subDirectory" ] }'
+            print(f'Base: { base_directory }')
 
     if 'import' not in yaml_data:
         raise Exception('No \'import\' section in YAML file!!!')
