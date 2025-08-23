@@ -1,7 +1,7 @@
 
 
+from Source.Colors import Colors
 from FreeCAD import Rotation , Vector
-from Colors import Colors
 
 
 Color = tuple[ float , float , float ]
