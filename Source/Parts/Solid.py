@@ -15,7 +15,7 @@ Solids = {
 }
 
 
-def insertSolid ( name , document , group , data ):
+def insertSolid ( document , group , name , data ):
     
     type = data[ 'solid' ]
 

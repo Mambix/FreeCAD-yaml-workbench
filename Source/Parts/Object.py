@@ -7,7 +7,7 @@ from os.path import expanduser , isfile , join
 Part_Extensions = [ '.stp', '.igs', 'iges', 'step' ]
 
 
-def insertObject ( folder , file , document , group , data = None ):
+def insertObject ( document , group , folder , file , data : dict | None = None ):
 
     path = join(folder,file)
 

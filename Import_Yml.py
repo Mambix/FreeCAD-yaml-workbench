@@ -1,8 +1,8 @@
 
-from Source.Parts import *
+from Source.Structure.Document import makeDocument
 from builtins import open as openFile
-from FreeCAD import newDocument , GuiUp
 from os.path import dirname , join
+from FreeCAD import GuiUp
 from yaml import safe_load
 
 
@@ -39,47 +39,10 @@ def open ( path ):
     if 'import' not in data:
         raise Exception('''No 'import' section in YAML file!''')
 
-    data = data[ 'import' ]
+    imports = data[ 'import' ]
 
-    for document_name , document_data in data.items():
-
-        document = newDocument(document_name)
-
-        for group_name , group_data in document_data.items():
-
-            group = document.addObject('App::DocumentObjectGroup',group_name)
-
-            if isinstance(group_data,str):
-                insertObject(folder,group_data,document,group)
-                continue
-
-            if isinstance(group_data,list):
-                
-                for file in group_data:
-                    insertObject(folder,file,document,group)
-
-                continue
-
-            for file , file_data in group_data.items():
-
-                if file == 'files':
-                
-                    for file in file_data:
-                        insertObject(folder,file,document,group)
-                    continue
-
-                if not isinstance(file_data,list):
-
-                    if 'solid' in file_data:
-                        insertSolid(file,document,group,file_data)
-                    else:
-                        insertObject(folder,file,document,group,file_data)
-                else:
-
-                    for file_data2 in file_data:
-                        insertObject(folder,file,document,group,file_data2)
-                        
-        document.recompute()
+    for name , data in imports.items():
+        makeDocument(folder,name,data)
 
     Gui.activeDocument().activeView().viewAxonometric() # type: ignore
-    Gui.SendMsgToActiveView("ViewFit") # type: ignore
+    Gui.SendMsgToActiveView('ViewFit') # type: ignore
