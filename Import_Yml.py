@@ -45,7 +45,7 @@ def insertObject(directory, filename, document, group, attributes = None):
     insertMesh(directory, filename, document, group, attributes)
 
 def insertMesh(directory, filename, document, group, attributes = None):
-    mesh = Mesh.Mesh(f'{ directory }/{ filename }')
+    mesh = Mesh.Mesh(path.join(directory,filename))
     object_name = filename[:-4]
     if 'objectName' in attributes:
         object_name = attributes['objectName']
@@ -71,7 +71,7 @@ def insertPart(directory, filename, document, group, attributes = None):
             return
 
     part = Part.Shape()
-    part = Part.read(f'{ directory }/{ filename }')
+    part = Part.read(path.join(directory,filename))
     object_name = filename[:-4]
     if 'objectName' in attributes:
         object_name = attributes['objectName']
@@ -315,7 +315,11 @@ def open(filename):
     print('YML data: {}'.format(yaml_data))
     if 'settings' in yaml_data:
         if 'subDirectory' in yaml_data[ "settings" ]:
-            base_directory += f'/{ yaml_data[ "settings" ][ "subDirectory" ] }'
+            
+            folder = yaml_data[ 'settings' ][ 'subDirectory' ]
+
+            base_directory = path.join(base_directory,folder)
+            
             print(f'Base: { base_directory }')
 
     if 'import' not in yaml_data:
