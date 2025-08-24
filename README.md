@@ -174,6 +174,9 @@ import:
 ## Contribution
 Contributions to this repo are welcome. Please fork this repo and create a pull request.
 
+If you want to work on the code make sure to install the  
+[FreeCAD-Stubs] package to receive proper type hinting.
+
 ## Known Issues
 The code is still in very early stages so I don't expect this to work on all imports.
 I tested it on my projects and it looks like it is working good enough to be released to public for further testing.
@@ -213,3 +216,6 @@ Fixed unsafe yaml loading varning
 
 ## License
 GNU Lesser General Public License v2.1
+
+
+[FreeCAD-Stubs]: https://pypi.org/project/freecad-stubs
