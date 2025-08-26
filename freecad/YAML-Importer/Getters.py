@@ -1,6 +1,6 @@
 
 
-from Source.Colors import Colors
+from .Colors import Colors
 from FreeCAD import Rotation , Vector
 
 

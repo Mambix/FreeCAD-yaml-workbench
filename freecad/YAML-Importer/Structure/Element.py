@@ -1,5 +1,5 @@
 
-from Source.Parts import *
+from ..Parts import *
 
 
 def makeElement ( document , group , folder , name , data ):

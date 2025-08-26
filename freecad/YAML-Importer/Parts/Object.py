@@ -1,7 +1,7 @@
 
-from Source.Parts.Mesh import insertMesh
-from Source.Parts.Part import insertPart
 from os.path import expanduser , isfile , join
+from .Mesh import insertMesh
+from .Part import insertPart
 
 
 Part_Extensions = [ '.stp', '.igs', 'iges', 'step' ]

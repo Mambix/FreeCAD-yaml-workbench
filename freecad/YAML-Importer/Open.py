@@ -1,9 +1,12 @@
 
-from Source.Structure.Document import makeDocument
+from .Structure.Document import makeDocument
 from builtins import open as openFile
 from os.path import dirname , join
 from FreeCAD import GuiUp
 from yaml import safe_load
+
+
+print('YAML-Workbench::init_gui')
 
 
 if GuiUp:

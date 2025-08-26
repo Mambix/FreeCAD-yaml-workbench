@@ -1,6 +1,6 @@
 
-from Source.Structure.Element import makeElement
-from Source.Parts import *
+from .Element import makeElement
+from ..Parts import *
 
 
 def makeGroup ( document , folder , name , data ):

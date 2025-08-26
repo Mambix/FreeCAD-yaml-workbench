@@ -1,5 +1,5 @@
 
-from Source.Getters import *
+from ..Getters import *
 from FreeCAD import Placement
 
 

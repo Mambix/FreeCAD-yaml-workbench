@@ -2,7 +2,11 @@
 from FreeCAD import addImportType
 
 
+print('YAML-Workbench::__init__')
+
+
 addImportType(
     'YAML script (*.yml)' , 
-    'Import_Yml'
+    'freecad.YAML-Importer.Open'
 )
+

@@ -1,5 +1,5 @@
 
-from Source.Parts.Common import defineCommon
+from .Common import defineCommon
 from os.path import expanduser , isfile , join
 from Part import Shape , read
 

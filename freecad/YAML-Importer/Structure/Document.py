@@ -1,5 +1,5 @@
 
-from Source.Structure.Group import makeGroup
+from .Group import makeGroup
 from FreeCAD import newDocument
 
 

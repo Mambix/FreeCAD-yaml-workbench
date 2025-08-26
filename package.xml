@@ -18,7 +18,6 @@
     <workbench>
       <icon>Resources/YAML_workbench_icon.svg</icon>
       <subdirectory>./</subdirectory>
-      <classname>Import_Yml</classname>
       <tag>Mambix</tag>
       <tag>import</tag>
       <tag>yaml</tag>

@@ -1,6 +1,6 @@
 
-from Source.Parts.Common import defineCommon
-from Source.Parts.Solids import *
+from .Common import defineCommon
+from .Solids import *
 
 
 Solids = {
