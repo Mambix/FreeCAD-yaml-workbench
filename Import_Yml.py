@@ -21,6 +21,7 @@ predefined_colors = {
     'blue': (0.0, 0.0, 1.0),
     'darkBlue': (0.0, 0.0, 0.67),
     'yellow': (1.0, 1.0, 0.0),
+    'orange': (1.0, 0.666, 0.0),
     'cyan': (0.0, 1.0, 1.0),
     'purple': (1.0, 0.0, 1.0),
     'white': (1.0, 1.0, 1.0),
@@ -44,7 +45,7 @@ def insertObject(directory, filename, document, group, attributes = None):
 def insertMesh(directory, filename, document, group, attributes = None):
     mesh = Mesh.Mesh(u'{}/{}'.format(directory, filename))
     object_name = filename[:-4]
-    if 'objectName' in attributes:
+    if attributes is not None and 'objectName' in attributes:
         object_name = attributes['objectName']
     new_mesh = document.addObject("Mesh::Feature", object_name)
     new_mesh.Mesh = mesh
