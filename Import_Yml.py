@@ -41,17 +41,19 @@ def sha256(input_string):
 
 def insertObject(directory, filename, document, group, attributes = None):
     file_extension = filename[-4:]
+    if file_extension[0] == '.':
+        file_extension = file_extension[1:]
     if directory[0:4] == 'http':
         cache_directory = os.path.expanduser('~/.FreeCAD/Mod/yaml-workspace')
         url = '{}/{}'.format(directory, filename)
         new_filename = '{}.{}'.format(sha256(url), file_extension)
-        if not os.path.isfile(os.path.join(cache_directory, filename)):
+        if not os.path.isfile(os.path.join(cache_directory, new_filename)):
             # only DL if no cache exists yet
             r = requests.get(url, stream=True)
             if r.status_code != 200:
                 print('ERROR: `{}/{}` not found!'.format(directory, new_filename))
                 return
-            with open(os.path.join(cache_directory, filename), 'wb') as f:
+            with pythonopen(os.path.join(cache_directory, new_filename), 'wb+') as f:
                 for chunk in r.iter_content(chunk_size=1024):
                     if chunk:
                         f.write(chunk)
