@@ -1,5 +1,7 @@
 import os
 import sys
+import hashlib
+import requests
 import FreeCAD as App, Mesh, Part
 from yaml import safe_load
 
@@ -21,6 +23,7 @@ predefined_colors = {
     'blue': (0.0, 0.0, 1.0),
     'darkBlue': (0.0, 0.0, 0.67),
     'yellow': (1.0, 1.0, 0.0),
+    'orange': (1.0, 0.666, 0.0),
     'cyan': (0.0, 1.0, 1.0),
     'purple': (1.0, 0.0, 1.0),
     'white': (1.0, 1.0, 1.0),
@@ -30,21 +33,44 @@ predefined_colors = {
     'black': (0.0, 0.0, 0.0),
 }
 
+def sha256(input_string):
+  utf8_encoded_string = input_string.encode('utf-8')
+  sha256_hash_object = hashlib.sha256(utf8_encoded_string)
+  string_hex_digest = sha256_hash_object.hexdigest()
+  return string_hex_digest
 
 def insertObject(directory, filename, document, group, attributes = None):
-    if not os.path.isfile(os.path.join(directory, filename)):
-        directory = os.path.expanduser('~/.FreeCAD/Mod/yaml-workspace')
+    file_extension = filename[-4:]
+    if directory[0:4] == 'http':
+        cache_directory = os.path.expanduser('~/.FreeCAD/Mod/yaml-workspace')
+        url = '{}/{}'.format(directory, filename)
+        new_filename = '{}.{}'.format(sha256(url), file_extension)
+        if not os.path.isfile(os.path.join(cache_directory, filename)):
+            # only DL if no cache exists yet
+            r = requests.get(url, stream=True)
+            if r.status_code != 200:
+                print('ERROR: `{}/{}` not found!'.format(directory, new_filename))
+                return
+            with open(os.path.join(cache_directory, filename), 'wb') as f:
+                for chunk in r.iter_content(chunk_size=1024):
+                    if chunk:
+                        f.write(chunk)
+        filename = new_filename
+        directory = cache_directory
+    else:
         if not os.path.isfile(os.path.join(directory, filename)):
-            print('ERROR: `{}` not found!'.format(filename))
-            return
-    if filename[-4:] in ['.stp', '.igs', 'iges', 'step']:
+            directory = os.path.expanduser('~/.FreeCAD/Mod/yaml-workspace')
+            if not os.path.isfile(os.path.join(directory, filename)):
+                print('ERROR: `{}` not found!'.format(filename))
+                return
+    if file_extension in ['.stp', '.igs', 'iges', 'step']:
         return insertPart(directory, filename, document, group, attributes)
     insertMesh(directory, filename, document, group, attributes)
 
 def insertMesh(directory, filename, document, group, attributes = None):
     mesh = Mesh.Mesh(u'{}/{}'.format(directory, filename))
     object_name = filename[:-4]
-    if 'objectName' in attributes:
+    if attributes is not None and 'objectName' in attributes:
         object_name = attributes['objectName']
     new_mesh = document.addObject("Mesh::Feature", object_name)
     new_mesh.Mesh = mesh
@@ -294,6 +320,7 @@ def getRotation(json_data):
 def open(filename):
     base_directory = os.path.dirname(filename)
     sub_directory = None
+    cache_directory = os.path.expanduser('~/.FreeCAD/Mod/yaml-workspace')
     print('Reading: {}'.format(filename))
     print('Base: {}'.format(base_directory))
 
@@ -307,7 +334,14 @@ def open(filename):
     print('YML data: {}'.format(yaml_data))
     if 'settings' in yaml_data:
         if 'subDirectory' in yaml_data['settings']:
-            base_directory += '/{}'.format(yaml_data['settings']['subDirectory'])
+            sub_directory = yaml_data['settings']['subDirectory']
+            if sub_directory[0:4] == 'http':
+                # User wants to load it from URL
+                base_directory = sub_directory
+                if not os.path.exists(cache_directory):
+                    os.makedirs(cache_directory)
+            else:
+                base_directory += '/{}'.format(sub_directory)
             print('Base: {}'.format(base_directory))
 
     if 'import' not in yaml_data:
