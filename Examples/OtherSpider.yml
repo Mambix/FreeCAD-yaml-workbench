@@ -1,0 +1,77 @@
+settings:
+  subDirectory: https://raw.githubusercontent.com/FreeCAD/FreeCAD-library/refs/heads/master/Robots/Quadruped%20robot/Spider%20robot/other%20spider/files
+import:
+  Other Spider:
+    Body:
+      Body_u_L_PCA_V2.stl:
+        - objectName: Body_top
+          color: blue
+      Body_d_L_Cap_V2.stl:
+        - objectName: Body_bottom
+          color: blue
+      BodyBack_V4_higher.stl:
+        - objectName: Body_cover
+          color: white
+          placement: [0.0, 0.0, -1.0]
+    Head:
+      Head_Hollow3.stl:
+        - objectName: Head
+          color: yellow
+      Fangs_Hollow5.stl:
+        - objectName: Fangs
+          color: yellow
+    Legs:
+      tibia_r_MG90.stl:
+        - objectName: Tibia_R_Front_Leg
+          color: red
+          rotationAngle: -270
+          placement: [-71.95, -205.8, 11.6]
+        - objectName: Tibia_L_Back_Leg
+          color: red
+          rotationAngle: -90
+          placement: [70.95, 35, 11.5]
+      tibia_l_MG90.stl:
+        - objectName: Tibia_L_Front_Leg
+          color: orange
+          rotationAngle: 90
+          placement: [70.9, -205.8, 11.65]
+        - objectName: Tibia_R_Back_Leg
+          color: orange
+          rotationAngle: -90
+          placement: [-70.95, 35, 11.5]
+      Cora_r_MG90.stl:
+        - objectName: Coxa_R_Front_Leg
+          color: red
+          rotationAngle: 90
+          placement: [-68.5, -46.5, 13.0]
+        - objectName: Coxa_L_Back_Leg
+          color: red
+          rotationAngle: -90
+          placement: [67.5, -124.0, 13.0]
+      Coxa_L_MG90.stl:
+        - objectName: Coxa_L_Front_Leg
+          color: orange
+          rotationAngle: 90
+          placement: [67.5, -46.5, 13.0]
+        - objectName: Coxa_R_Back_Leg
+          color: orange
+          rotationAngle: -90
+          placement: [-67.5, -124.0, 13.0]
+      Femur_MG90_B.stl:
+        - objectName: Femur_R_Front_Leg
+          color: red
+          rotationAngle: -90
+          placement: [-129.85, -64.9, 31.2]
+        - objectName: Femur_L_Back_Leg
+          color: red
+          rotationAngle: 90
+          placement: [128.85, -105.8, 31.1]
+      Femur_MG90_A.stl:
+        - objectName: Femur_L_Front_Leg
+          color: orange
+          rotationAngle: 90
+          placement: [128.85, -64.9, 31.2]
+        - objectName: Femur_R_Back_Leg
+          color: orange
+          rotationAngle: -90
+          placement: [-128.85, -105.8, 31.1]
