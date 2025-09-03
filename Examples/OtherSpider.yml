@@ -4,17 +4,22 @@ import:
   Other Spider:
     Body:
       Body_u_L_PCA_V2.stl:
-        - color: blue
+        - objectName: Body_top
+          color: blue
       Body_d_L_Cap_V2.stl:
-        - color: blue
+        - objectName: Body_bottom
+          color: blue
       BodyBack_V4_higher.stl:
-        - color: white
+        - objectName: Body_cover
+          color: white
           placement: [0.0, 0.0, -1.0]
     Head:
       Head_Hollow3.stl:
-        color: yellow
+        - objectName: Head
+          color: yellow
       Fangs_Hollow5.stl:
-        color: yellow
+        - objectName: Fangs
+          color: yellow
     Legs:
       tibia_r_MG90.stl:
         - objectName: Tibia_R_Front_Leg
