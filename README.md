@@ -198,6 +198,11 @@ ETH Wallet Address: 0x91400083bf0DaC3474B70550662D32473Ab97d3b
 
 ## Release notes
 
+* 2025.09.03 (**0.1.3**) :    
+Added model loading and caching from internet
+Fixed 2 bugs
+Added `OtherSpider.yml` example 
+
 * 2022.08.16 (**0.1.2**) :    
 Fixed adding simple solid of type wedge  
 Fix `SimpleSolids.yml` example  
