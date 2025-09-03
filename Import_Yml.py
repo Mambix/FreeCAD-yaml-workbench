@@ -1,0 +1,384 @@
+import os
+import sys
+import hashlib
+import requests
+import FreeCAD as App, Mesh, Part
+from yaml import safe_load
+
+if App.GuiUp:
+    import FreeCADGui as Gui
+
+
+if not sys.version_info.major == 3:
+    print("This script requires Python 3.x")
+    print("You are using Python {}.{}.".format(sys.version_info.major, sys.version_info.minor))
+    sys.exit(1)
+
+pythonopen = open
+predefined_colors = {
+    'red': (1.0, 0.0, 0.0),
+    'darkRed': (0.67, 0.0, 0.0),
+    'green': (0.0, 1.0, 0.0),
+    'darkGreen': (0.0, 0.67, 0.0),
+    'blue': (0.0, 0.0, 1.0),
+    'darkBlue': (0.0, 0.0, 0.67),
+    'yellow': (1.0, 1.0, 0.0),
+    'orange': (1.0, 0.666, 0.0),
+    'cyan': (0.0, 1.0, 1.0),
+    'purple': (1.0, 0.0, 1.0),
+    'white': (1.0, 1.0, 1.0),
+    'lightGray': (0.75, 0.75, 0.75),
+    'gray': (0.5, 0.5, 0.5),
+    'darkGray': (0.25, 0.25, 0.25),
+    'black': (0.0, 0.0, 0.0),
+}
+
+def sha256(input_string):
+  utf8_encoded_string = input_string.encode('utf-8')
+  sha256_hash_object = hashlib.sha256(utf8_encoded_string)
+  string_hex_digest = sha256_hash_object.hexdigest()
+  return string_hex_digest
+
+def insertObject(directory, filename, document, group, attributes = None):
+    file_extension = filename[-4:]
+    if file_extension[0] == '.':
+        file_extension = file_extension[1:]
+    if directory[0:4] == 'http':
+        cache_directory = os.path.expanduser('~/.FreeCAD/Mod/yaml-workspace')
+        url = '{}/{}'.format(directory, filename)
+        new_filename = '{}.{}'.format(sha256(url), file_extension)
+        if not os.path.isfile(os.path.join(cache_directory, new_filename)):
+            # only DL if no cache exists yet
+            r = requests.get(url, stream=True)
+            if r.status_code != 200:
+                print('ERROR: `{}/{}` not found!'.format(directory, new_filename))
+                return
+            with pythonopen(os.path.join(cache_directory, new_filename), 'wb+') as f:
+                for chunk in r.iter_content(chunk_size=1024):
+                    if chunk:
+                        f.write(chunk)
+        filename = new_filename
+        directory = cache_directory
+    else:
+        if not os.path.isfile(os.path.join(directory, filename)):
+            directory = os.path.expanduser('~/.FreeCAD/Mod/yaml-workspace')
+            if not os.path.isfile(os.path.join(directory, filename)):
+                print('ERROR: `{}` not found!'.format(filename))
+                return
+    if file_extension in ['.stp', '.igs', 'iges', 'step']:
+        return insertPart(directory, filename, document, group, attributes)
+    insertMesh(directory, filename, document, group, attributes)
+
+def insertMesh(directory, filename, document, group, attributes = None):
+    mesh = Mesh.Mesh(u'{}/{}'.format(directory, filename))
+    object_name = filename[:-4]
+    if attributes is not None and 'objectName' in attributes:
+        object_name = attributes['objectName']
+    new_mesh = document.addObject("Mesh::Feature", object_name)
+    new_mesh.Mesh = mesh
+    if attributes:
+        color = getColor(attributes)
+        if color:
+            new_mesh.ViewObject.ShapeColor = color
+        transparency = getTransparency(attributes)
+        if transparency:
+            new_mesh.ViewObject.Transparency = transparency
+        placement = getPlacement(attributes)
+        rotation = getRotation(attributes)
+        new_mesh.Placement = App.Placement(placement, rotation)
+    group.addObject(new_mesh)
+
+def insertPart(directory, filename, document, group, attributes = None):
+    if not os.path.isfile(os.path.join(directory, filename)):
+        directory = os.path.expanduser('~/.FreeCAD/Mod/yaml-workspace')
+        if not os.path.isfile(os.path.join(directory, filename)):
+            print('ERROR: `{}` not found!'.format(filename))
+            return
+
+    part = Part.Shape()
+    part = Part.read(u'{}/{}'.format(directory, filename))
+    object_name = filename[:-4]
+    if 'objectName' in attributes:
+        object_name = attributes['objectName']
+    new_part = document.addObject("Part::Feature", object_name)
+    new_part.Shape = part
+    if attributes:
+        color = getColor(attributes)
+        if color:
+            new_part.ViewObject.ShapeColor = color
+        transparency = getTransparency(attributes)
+        if transparency:
+            new_part.ViewObject.Transparency = transparency
+        placement = getPlacement(attributes)
+        rotation = getRotation(attributes)
+        new_part.Placement = App.Placement(placement, rotation)
+    group.addObject(new_part)
+
+def insertSolid(name, document, group, attributes):
+    if attributes['solid'] == 'cylinder':
+        return insertCylinder(name, document, group, attributes)
+    if attributes['solid'] == 'sphere':
+        return insertSphere(name, document, group, attributes)
+    if attributes['solid'] == 'ellipsoid':
+        return insertEllipsoid(name, document, group, attributes)
+    if attributes['solid'] == 'box':
+        return insertBox(name, document, group, attributes)
+    if attributes['solid'] == 'cone':
+        return insertCone(name, document, group, attributes)
+    if attributes['solid'] == 'torus':
+        return insertTorus(name, document, group, attributes)
+    if attributes['solid'] == 'prism':
+        return insertPrism(name, document, group, attributes)
+    if attributes['solid'] == 'wedge':
+        return insertWedge(name, document, group, attributes)
+    print('ERROR: Unsupported solid tyle {}'.format(attributes['solid']))
+
+def insertCylinder(name, document, group, attributes):
+    solid = document.addObject("Part::Cylinder","Cylinder")
+    solid.Label = name
+    solid.Radius = '{} mm'.format(attributes['radius'])
+    solid.Height = '{} mm'.format(attributes['height'])
+    if 'angle' in attributes:
+        solid.Angle = '{} deg'.format(attributes['angle'])
+    color = getColor(attributes)
+    if color:
+        solid.ViewObject.ShapeColor = color
+    transparency = getTransparency(attributes)
+    if transparency:
+        solid.ViewObject.Transparency = transparency
+    placement = getPlacement(attributes)
+    rotation = getRotation(attributes)
+    solid.Placement = App.Placement(placement, rotation)
+    group.addObject(solid)
+
+def insertSphere(name, document, group, attributes):
+    solid = document.addObject("Part::Sphere","Sphere")
+    solid.Label = name
+    solid.Radius = '{} mm'.format(attributes['radius'])
+    if 'angle1' in attributes:
+        solid.Angle1 = '{} deg'.format(attributes['angle1'])
+    if 'angle2' in attributes:
+        solid.Angle2 = '{} deg'.format(attributes['angle2'])
+    if 'angle3' in attributes:
+        solid.Angle3 = '{} deg'.format(attributes['angle3'])
+    color = getColor(attributes)
+    if color:
+        solid.ViewObject.ShapeColor = color
+    transparency = getTransparency(attributes)
+    if transparency:
+        solid.ViewObject.Transparency = transparency
+    placement = getPlacement(attributes)
+    rotation = getRotation(attributes)
+    solid.Placement = App.Placement(placement, rotation)
+    group.addObject(solid)
+
+def insertEllipsoid(name, document, group, attributes):
+    solid = document.addObject("Part::Ellipsoid","Ellipsoid")
+    solid.Label = name
+    solid.Radius1 = '{} mm'.format(attributes['radius1'])
+    solid.Radius2 = '{} mm'.format(attributes['radius2'])
+    solid.Radius3 = '{} mm'.format(attributes['radius3'])
+    if 'angle1' in attributes:
+        solid.Angle1 = '{} deg'.format(attributes['angle1'])
+    if 'angle2' in attributes:
+        solid.Angle2 = '{} deg'.format(attributes['angle2'])
+    if 'angle3' in attributes:
+        solid.Angle3 = '{} deg'.format(attributes['angle3'])
+    color = getColor(attributes)
+    if color:
+        solid.ViewObject.ShapeColor = color
+    transparency = getTransparency(attributes)
+    if transparency:
+        solid.ViewObject.Transparency = transparency
+    placement = getPlacement(attributes)
+    rotation = getRotation(attributes)
+    solid.Placement = App.Placement(placement, rotation)
+    group.addObject(solid)
+
+def insertBox(name, document, group, attributes):
+    solid = document.addObject("Part::Box","Box")
+    solid.Label = name
+    solid.Length = '{} mm'.format(attributes['length'])
+    solid.Width = '{} mm'.format(attributes['width'])
+    solid.Height = '{} mm'.format(attributes['height'])
+    color = getColor(attributes)
+    if color:
+        solid.ViewObject.ShapeColor = color
+    transparency = getTransparency(attributes)
+    if transparency:
+        solid.ViewObject.Transparency = transparency
+    placement = getPlacement(attributes)
+    rotation = getRotation(attributes)
+    solid.Placement = App.Placement(placement, rotation)
+    group.addObject(solid)
+
+def insertCone(name, document, group, attributes):
+    solid = document.addObject("Part::Cone","Cone")
+    solid.Label = name
+    solid.Radius1 = '{} mm'.format(attributes['radius1'])
+    solid.Radius2 = '{} mm'.format(attributes['radius2'])
+    solid.Height = '{} mm'.format(attributes['height'])
+    if 'angle' in attributes:
+        solid.Angle = '{} deg'.format(attributes['angle'])
+    color = getColor(attributes)
+    if color:
+        solid.ViewObject.ShapeColor = color
+    transparency = getTransparency(attributes)
+    if transparency:
+        solid.ViewObject.Transparency = transparency
+    placement = getPlacement(attributes)
+    rotation = getRotation(attributes)
+    solid.Placement = App.Placement(placement, rotation)
+    group.addObject(solid)
+
+def insertTorus(name, document, group, attributes):
+    solid = document.addObject("Part::Torus","Torus")
+    solid.Label = name
+    solid.Radius1 = '{} mm'.format(attributes['radius1'])
+    solid.Radius2 = '{} mm'.format(attributes['radius2'])
+    if 'angle1' in attributes:
+        solid.Angle1 = '{} deg'.format(attributes['angle1'])
+    if 'angle2' in attributes:
+        solid.Angle2 = '{} deg'.format(attributes['angle2'])
+    if 'angle3' in attributes:
+        solid.Angle3 = '{} deg'.format(attributes['angle3'])
+    color = getColor(attributes)
+    if color:
+        solid.ViewObject.ShapeColor = color
+    transparency = getTransparency(attributes)
+    if transparency:
+        solid.ViewObject.Transparency = transparency
+    placement = getPlacement(attributes)
+    rotation = getRotation(attributes)
+    solid.Placement = App.Placement(placement, rotation)
+    group.addObject(solid)
+
+def insertPrism(name, document, group, attributes):
+    solid = document.addObject("Part::Prism","Prism")
+    solid.Label = name
+    solid.Polygon = int(attributes['polygon'])
+    solid.Circumradius = '{} mm'.format(attributes['radius'])
+    solid.Height = '{} mm'.format(attributes['height'])
+    color = getColor(attributes)
+    if color:
+        solid.ViewObject.ShapeColor = color
+    transparency = getTransparency(attributes)
+    if transparency:
+        solid.ViewObject.Transparency = transparency
+    placement = getPlacement(attributes)
+    rotation = getRotation(attributes)
+    solid.Placement = App.Placement(placement, rotation)
+    group.addObject(solid)
+
+def insertWedge(name, document, group, attributes):
+    solid = document.addObject("Part::Wedge","Wedge")
+    solid.Label = name
+    solid.Xmin = '{} mm'.format(attributes['xmin'])
+    solid.Ymin = '{} mm'.format(attributes['ymin'])
+    solid.Zmin = '{} mm'.format(attributes['zmin'])
+    solid.X2min = '{} mm'.format(attributes['x2min'])
+    solid.Z2min = '{} mm'.format(attributes['z2min'])
+    solid.Xmax = '{} mm'.format(attributes['xmax'])
+    solid.Ymax = '{} mm'.format(attributes['ymax'])
+    solid.Zmax = '{} mm'.format(attributes['zmax'])
+    solid.X2max = '{} mm'.format(attributes['x2max'])
+    solid.Z2max = '{} mm'.format(attributes['z2max'])
+    color = getColor(attributes)
+    if color:
+        solid.ViewObject.ShapeColor = color
+    transparency = getTransparency(attributes)
+    if transparency:
+        solid.ViewObject.Transparency = transparency
+    placement = getPlacement(attributes)
+    rotation = getRotation(attributes)
+    solid.Placement = App.Placement(placement, rotation)
+    group.addObject(solid)
+
+def getColor(json_data):
+    color_data = json_data.get('color', None)
+    if not color_data:
+        return None
+    if not isinstance(color_data, list):
+        if color_data not in predefined_colors:
+            raise Exception('Color data needs to be an array of RGB floats or one of predefined colors!!!')
+        return predefined_colors[color_data]
+    return (color_data[0], color_data[1], color_data[2])
+
+def getTransparency(json_data):
+    return json_data.get('transparency', None)
+
+def getPlacement(json_data):
+    placement = App.Vector(.0, .0, .0)
+    placement_config = json_data.get('placement', None)
+    if placement_config:
+        placement = App.Vector(*placement_config)
+    return placement
+
+def getRotation(json_data):
+    rotation_vector = json_data.get('rotationVector', (.0, .0, 1.0))
+    rotation_angle = json_data.get('rotationAngle', 0.0)
+    return App.Rotation(App.Vector(*rotation_vector), rotation_angle)
+
+def open(filename):
+    base_directory = os.path.dirname(filename)
+    sub_directory = None
+    cache_directory = os.path.expanduser('~/.FreeCAD/Mod/yaml-workspace')
+    print('Reading: {}'.format(filename))
+    print('Base: {}'.format(base_directory))
+
+    yaml_data = None
+    with pythonopen(filename) as f:
+        yaml_data = safe_load(f)
+
+    if yaml_data is None:
+        raise Exception("Error reading YAML file: {}".format(filename))
+
+    print('YML data: {}'.format(yaml_data))
+    if 'settings' in yaml_data:
+        if 'subDirectory' in yaml_data['settings']:
+            sub_directory = yaml_data['settings']['subDirectory']
+            if sub_directory[0:4] == 'http':
+                # User wants to load it from URL
+                base_directory = sub_directory
+                if not os.path.exists(cache_directory):
+                    os.makedirs(cache_directory)
+            else:
+                base_directory += '/{}'.format(sub_directory)
+            print('Base: {}'.format(base_directory))
+
+    if 'import' not in yaml_data:
+        raise Exception('No \'import\' section in YAML file!!!')
+
+    yaml_data = yaml_data['import']
+
+    for document_name, document_data in yaml_data.items():
+        document = App.newDocument(document_name)
+
+        for group_name, group_data in document_data.items():
+            document_group = document.addObject("App::DocumentObjectGroup", group_name)
+
+            if isinstance(group_data, str):
+                insertObject(base_directory, group_data, document, document_group)
+                continue
+
+            if isinstance(group_data, list):
+                for file in group_data:
+                    insertObject(base_directory, file, document, document_group)
+                continue
+
+            for file, file_data in group_data.items():
+                if file == 'files':
+                    for f in file_data:
+                        insertObject(base_directory, f, document, document_group)
+                    continue
+                if not isinstance(file_data, list):
+                    if 'solid' not in file_data:
+                        insertObject(base_directory, file, document, document_group, file_data)
+                    else:
+                        insertSolid(file, document, document_group, file_data)
+                else:
+                    for file_data2 in file_data:
+                        insertObject(base_directory, file, document, document_group, file_data2)
+        document.recompute()
+    Gui.activeDocument().activeView().viewAxonometric()
+    Gui.SendMsgToActiveView("ViewFit")
