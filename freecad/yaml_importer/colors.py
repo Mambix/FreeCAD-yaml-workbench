@@ -1,5 +1,9 @@
+"""
+Provides common colors
+"""
 
-Colors = {
+
+COLORS = {
     'lightGray' : ( 0.75 , 0.75  , 0.75 ) ,
     'darkGreen' : ( 0.00 , 0.67  , 0.00 ) ,
     'darkBlue'  : ( 0.00 , 0.00  , 0.67 ) ,

@@ -85,8 +85,8 @@ Note that there are no instruction here to color them or move/rotate them. It's 
 
  ### Common library folder
 If you need to import same object(s) to different projects you can now do this easilly from default library folder.
-Place your models into `~/.FreeCAD/Mod/yaml-workspace` and reference them simply by name in your `.co2tools.yml` configuration file.
-If the script does not find a file specified in the `sourceDirectory` location it will check `~/.FreeCAD/Mod/yaml-workspace` folder.
+Place your models into `~/.FreeCAD/Mod/yaml-workbench` and reference them simply by name in your `.co2tools.yml` configuration file.
+If the script does not find a file specified in the `sourceDirectory` location it will check `~/.FreeCAD/Mod/yaml-workbench` folder.
 If it can not be found there an error will be printed to console.
 
 ### Importing parts
@@ -200,6 +200,9 @@ ETH Wallet Address: 0x91400083bf0DaC3474B70550662D32473Ab97d3b
 **Contributions of any size are welcome. Thank you!**
 
 ## Release notes
+
+* 2025.09.05 (**0.1.4**) :    
+Reactored code for FreeCAD v1.x support
 
 * 2025.09.03 (**0.1.3**) :    
 Added model loading and caching from internet

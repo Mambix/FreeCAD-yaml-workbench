@@ -1,9 +1,11 @@
+"""
+Provides Wedge functions
+"""
+def insert_wedge ( document , data ):
+    """Function inserts FreeCD wedge object."""
+    solid = document.addObject('Part::Wedge', 'Wedge')
 
-def insertWedge ( document , data ):
-
-    solid = document.addObject('Part::Wedge','Wedge')
-
-    keys = [ 
+    keys = [
         'Xmin' , 'Ymin' , 'Zmin' ,
         'Xmax' , 'Ymax' , 'Zmax' ,
         'X2min' , 'Z2min' ,
@@ -12,5 +14,4 @@ def insertWedge ( document , data ):
 
     for key in keys:
         setattr(solid,key, f'{ data[ key.lower() ] } mm' )
-
     return solid
