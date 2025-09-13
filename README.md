@@ -1,6 +1,12 @@
 # YAML Workbench
 A FreeCAD addon that loads and manipulates objects via YAML
 
+> [!CAUTION]
+> Breaking change: this PR will rename the folder where the addon is placed in. It changes from `yaml-workspace` to `yaml-workbench`. This was something that was on a todo list for quite a while but now that we make transition to FreeCAD v1.x is a moment this renaming gets sorted out too. 
+
+> [!TIP]
+> When the upgrade happens and your installed addon dissapears all you need to do is rename the folder from `yaml-workspace` to `yaml-workbench` and restart FreeCAD. Then the upgrades should continue from where they left of. Or you can install it again and delete old folder.
+
 ## Problem
 When I work with my ideas that live in DXF files and need to be cut from plywood with the help of CO2 laser.
 I ran into a small problem. I don't own a CO2 laser cutter so the designs have to be solid or it would cost me a fortune
